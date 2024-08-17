@@ -87,7 +87,9 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
         />
 
         <div className="flex flex-col gap-2">
-          <Button type="submit">Entrar</Button>
+          <Button id="login-button" type="submit">
+            Entrar
+          </Button>
           <Button variant="outline" onClick={handleNavigateRegister}>
             Registrar
           </Button>
