@@ -1,0 +1,25 @@
+import { z } from "zod";
+
+export const RegisterUserSchema = z
+  .object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(8, "Senha deve ter no mínimo 8 caracteres!")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
+      ),
+    confirmPassword: z.string().min(8),
+  })
+  .refine(
+    (data) => {
+      return data.confirmPassword === data.password;
+    },
+    {
+      message: "As senhas não são iguais",
+      path: ["confirmPassword"],
+    }
+  );
+
+export type RegisterUserType = z.infer<typeof RegisterUserSchema>;

@@ -8,6 +8,7 @@ import AuthRoute from "./routes/auth-route";
 import LoginRoute from "./routes/login-user-route";
 import { ThemeProvider } from "./components/theme-provider/theme-provider";
 import { RoutesEnum } from "./shared/enums/routes-enum";
+import RegisterUserRoute from "./routes/register-user-route";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.REGISTER,
-        element: <div>Register</div>,
+        element: <RegisterUserRoute />,
       },
       {
         path: RoutesEnum.FORGOT_PASSWORD,
