@@ -9,12 +9,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
 
@@ -36,6 +36,11 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
   function handleNavigateRegister() {
     reset();
     navigate(RoutesEnum.REGISTER);
+  }
+
+  function handleNavigateForgotPassword() {
+    reset();
+    navigate(RoutesEnum.FORGOT_PASSWORD);
   }
 
   return (
@@ -60,7 +65,15 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <div className="flex justify-between">
+                <FormLabel>Senha</FormLabel>
+                <button
+                  className="text-xs underline font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  onClick={handleNavigateForgotPassword}
+                >
+                  Esqueceu a senha?
+                </button>
+              </div>
               <FormControl>
                 <Input
                   type="password"
