@@ -9,6 +9,7 @@ import LoginRoute from "./routes/login-user-route";
 import { ThemeProvider } from "./components/theme-provider/theme-provider";
 import { RoutesEnum } from "./shared/enums/routes-enum";
 import RegisterUserRoute from "./routes/register-user-route";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +46,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="system" storageKey="todo-sync-ui-theme">
-      <RouterProvider router={router} />
+      <TooltipProvider>
+        <RouterProvider router={router} />
+      </TooltipProvider>
     </ThemeProvider>
   </StrictMode>
 );

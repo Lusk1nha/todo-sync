@@ -1,4 +1,4 @@
-import { LoginUserForm } from "@/components/forms/login-user-form";
+import { LoginUserForm } from "@/components/forms/login-user-form/login-user-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LoginUserSchema,

@@ -2,15 +2,25 @@ import { z } from "zod";
 
 export const RegisterUserSchema = z
   .object({
-    email: z.string().email(),
+    email: z
+      .string({
+        required_error: "E-mail é obrigatório!",
+      })
+      .email("E-mail inválido!"),
     password: z
-      .string()
+      .string({
+        required_error: "Senha é obrigatória!",
+      })
       .min(8, "Senha deve ter no mínimo 8 caracteres!")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
       ),
-    confirmPassword: z.string().min(8),
+    confirmPassword: z
+      .string({
+        required_error: "Confirmação de senha é obrigatória!",
+      })
+      .min(8),
   })
   .refine(
     (data) => {
@@ -22,4 +32,4 @@ export const RegisterUserSchema = z
     }
   );
 
-export type RegisterUserType = z.infer<typeof RegisterUserSchema>;
+export type RegisterUserSchemaType = z.infer<typeof RegisterUserSchema>;
