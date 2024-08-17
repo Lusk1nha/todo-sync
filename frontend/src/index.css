@@ -62,6 +62,10 @@
 @layer base {
   * {
     @apply border-border;
+    @apply font-sans;
+  }
+  #root {
+    @apply flex flex-col h-screen min-h-screen;
   }
   body {
     @apply bg-background text-foreground;
