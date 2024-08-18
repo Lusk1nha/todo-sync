@@ -1,4 +1,4 @@
-import { useTheme } from "@/shared/hooks/useTheme";
+import { useTheme } from "@/shared/hooks/use-theme-hook";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 

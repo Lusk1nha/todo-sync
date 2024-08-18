@@ -12,11 +12,14 @@ import {
   LoginUserSchema,
   LoginUserSchemaType,
 } from "@/shared/schemas/login-user-schema";
+import { AuthenticationService } from "@/shared/services/authentication-service";
 
 export default function LoginRoute() {
-  function handleLogin(data: LoginUserSchemaType) {
+  const { loginUser } = new AuthenticationService();
+
+  async function handleLogin(data: LoginUserSchemaType) {
     LoginUserSchema.parse(data);
-    console.log(data);
+    await loginUser(data);
   }
 
   return (

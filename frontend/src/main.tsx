@@ -2,47 +2,43 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from "./routes/root";
-import AuthRoute from "./routes/auth-route";
-import LoginRoute from "./routes/login-user-route";
 import { ThemeProvider } from "./components/theme-provider/theme-provider";
-import { RoutesEnum } from "./shared/enums/routes-enum";
-import RegisterUserRoute from "./routes/register-user-route";
 import { TooltipProvider } from "./components/ui/tooltip";
-import ForgotUserRoute from "./routes/forgot-user-route";
+import App from "./app";
 
-const router = createBrowserRouter([
-  {
-    path: RoutesEnum.HOME,
-    element: <Root />,
-    errorElement: <div>404</div>,
-    children: [
-      {
-        path: "home",
-        element: <div>Home</div>,
-      },
-    ],
-  },
-  {
-    path: RoutesEnum.AUTH,
-    element: <AuthRoute />,
-    children: [
-      {
-        path: RoutesEnum.LOGIN,
-        element: <LoginRoute />,
-      },
-      {
-        path: RoutesEnum.REGISTER,
-        element: <RegisterUserRoute />,
-      },
-      {
-        path: RoutesEnum.FORGOT_PASSWORD,
-        element: <ForgotUserRoute />,
-      },
-    ],
-  },
-]);
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import { RoutesEnum } from "./shared/enums/routes-enum";
+
+import AuthRoute from "./routes/auth-route";
+import ForgotUserRoute from "./routes/forgot-user-route";
+import LoginRoute from "./routes/login-user-route";
+import RegisterUserRoute from "./routes/register-user-route";
+import ProtectedAuthRoute from "./routes/protected-auth";
+import HomeRoute from "./routes/home-route";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path={RoutesEnum.ROOT} element={<App />}>
+      <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
+        <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+      </Route>
+
+      <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
+        <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />
+        <Route path={RoutesEnum.REGISTER} element={<RegisterUserRoute />} />
+        <Route
+          path={RoutesEnum.FORGOT_PASSWORD}
+          element={<ForgotUserRoute />}
+        />
+      </Route>
+    </Route>
+  )
+);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
