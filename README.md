@@ -11,4 +11,17 @@ Frontend (React)
 
 Backend (Rust)
 
+- Axum (http)
+- Tokio (async)
+- SQLx (Postgres)
+- Serde (JSON)
+
 DataBase (Postgres)
+
+- Users
+- Tasks (CRUD)
+
+Architecture
+
+- Authentification
+- Token (JWT)

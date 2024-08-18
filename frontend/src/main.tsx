@@ -4,7 +4,8 @@ import "./index.css";
 
 import { ThemeProvider } from "./components/theme-provider/theme-provider";
 import { TooltipProvider } from "./components/ui/tooltip";
-import App from "./App";
+import App from "./app";
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -12,14 +13,21 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { RoutesEnum } from "./shared/enums/routes-enum";
+
 import AuthRoute from "./routes/auth-route";
 import ForgotUserRoute from "./routes/forgot-user-route";
 import LoginRoute from "./routes/login-user-route";
 import RegisterUserRoute from "./routes/register-user-route";
+import ProtectedAuthRoute from "./routes/protected-auth";
+import HomeRoute from "./routes/home-route";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={RoutesEnum.ROOT} element={<App />}>
+      <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
+        <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+      </Route>
+
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
         <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />
         <Route path={RoutesEnum.REGISTER} element={<RegisterUserRoute />} />

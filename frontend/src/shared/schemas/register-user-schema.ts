@@ -2,6 +2,9 @@ import { z } from "zod";
 
 export const RegisterUserSchema = z
   .object({
+    username: z.string({
+      required_error: "Nome de usuário é obrigatório!",
+    }),
     email: z
       .string({
         required_error: "E-mail é obrigatório!",
