@@ -16,6 +16,7 @@ import {
 } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
+import { FieldGroup } from "../utilities/field-group";
 
 interface IRegisterUserFormProps {
   onSubmit: (data: RegisterUserSchemaType) => void;
@@ -38,60 +39,62 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-        <FormField
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>E-mail</FormLabel>
-              <FormControl>
-                <Input placeholder="Insira o e-mail" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
+        <FieldGroup>
+          <FormField
+            control={control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input placeholder="Insira o e-mail" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Senha</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Insira a senha"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Insira a senha"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirme a Senha</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Insira a confirmação da senha"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirme a Senha</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Insira a confirmação da senha"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FieldGroup>
 
         <div className="flex flex-col gap-2">
-          <Button type="submit">Entrar</Button>
-          <Button variant="secondary" onClick={handleNavigateLogin}>
+          <Button type="submit">Criar nova conta</Button>
+          <Button variant="outline" onClick={handleNavigateLogin}>
             Já possui conta? Clique aqui para entrar!
           </Button>
         </div>

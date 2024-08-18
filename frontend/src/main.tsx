@@ -10,6 +10,7 @@ import { ThemeProvider } from "./components/theme-provider/theme-provider";
 import { RoutesEnum } from "./shared/enums/routes-enum";
 import RegisterUserRoute from "./routes/register-user-route";
 import { TooltipProvider } from "./components/ui/tooltip";
+import ForgotUserRoute from "./routes/forgot-user-route";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.FORGOT_PASSWORD,
-        element: <div>Forgot Password</div>,
+        element: <ForgotUserRoute />,
       },
     ],
   },

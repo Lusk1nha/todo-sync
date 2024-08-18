@@ -17,6 +17,7 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
+import { FieldGroup } from "../utilities/field-group";
 
 interface ILoginUserFormProps {
   onSubmit: (data: LoginUserSchemaType) => void;
@@ -45,51 +46,55 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-        <FormField
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>E-mail</FormLabel>
-              <FormControl>
-                <Input placeholder="Insira o e-mail" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
+        <FieldGroup>
+          <FormField
+            control={control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input placeholder="Insira o e-mail" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between">
-                <FormLabel>Senha</FormLabel>
-                <button
-                  className="text-xs underline font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  onClick={handleNavigateForgotPassword}
-                >
-                  Esqueceu a senha?
-                </button>
-              </div>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Insira a senha"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-wrap justify-between gap-2">
+                  <FormLabel>Senha</FormLabel>
+                  <button
+                    className="text-xs underline font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    onClick={handleNavigateForgotPassword}
+                  >
+                    Esqueceu a senha?
+                  </button>
+                </div>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Insira a senha"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FieldGroup>
 
         <div className="flex flex-col gap-2">
-          <Button type="submit">Entrar</Button>
+          <Button id="login-button" type="submit">
+            Entrar
+          </Button>
           <Button variant="outline" onClick={handleNavigateRegister}>
-            Registrar
+            Criar nova conta
           </Button>
         </div>
       </form>

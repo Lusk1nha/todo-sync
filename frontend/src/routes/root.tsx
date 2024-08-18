@@ -8,6 +8,7 @@ export default function Root() {
           teste
         </aside>
       </header>
+
       <main className="w-full h-full">
         <Outlet />
       </main>
