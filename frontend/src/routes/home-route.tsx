@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-export default function Root() {
+export default function HomeRoute() {
   return (
     <div className="w-full h-full flex">
       <header>

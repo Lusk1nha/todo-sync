@@ -70,6 +70,7 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
                 <div className="flex flex-wrap justify-between gap-2">
                   <FormLabel>Senha</FormLabel>
                   <button
+                    type="button"
                     className="text-xs underline font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     onClick={handleNavigateForgotPassword}
                   >

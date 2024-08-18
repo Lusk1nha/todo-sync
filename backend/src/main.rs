@@ -1,51 +1,37 @@
-use axum::{
-    extract::Json,
-    response::Html,
-    routing::{get, post},
-    Router,
-};
-use serde::{Deserialize, Serialize};
+mod database;
+mod http;
+
+use database::get_connection_pool;
+
+use dotenv::dotenv;
+use std::env;
 
 #[tokio::main]
 async fn main() {
-    // build our application with a route
-    let app = Router::new()
-        .route("/", get(handler))
-        .route("/users", post(get_user_by_email));
+    // Load the environment variables.
+    dotenv().ok();
 
-    // run it
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080")
-        .await
-        .unwrap();
+    // Initialize the logger.
+    env_logger::init();
 
-    println!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app).await.unwrap();
-}
+    // Get the environment variables. If they are not set, the program will panic.
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    // let hmc_key = env::var("HMAC_KEY").expect("HMAC_KEY must be set");
 
-async fn handler() -> Html<&'static str> {
-    "<h1>Hello, World 2!</h1>".into()
-}
+    // Get the connection pool.
+    let db = get_connection_pool(&database_url).await.unwrap();
 
-#[derive(Deserialize, Serialize)]
-struct CreateUserPayload {
-    email: String,
-    password: String,
-}
-#[derive(Deserialize, Serialize)]
-struct ResponseCreateUserPayload {
-    email: String,
-    password: String,
-    invoice: bool,
-}
-
-async fn get_user_by_email(
-    Json(payload): Json<CreateUserPayload>,
-) -> Json<ResponseCreateUserPayload> {
-    let payload_with_boolean = ResponseCreateUserPayload {
-        email: payload.email,
-        password: payload.password,
-        invoice: true,
+    // Run the migrations.
+    match sqlx::migrate!().run(&db).await {
+        Ok(_) => {
+            println!("✅Migration is successful!");
+        }
+        Err(err) => {
+            println!("🔥Failed to migrate: {:?}", err);
+            std::process::exit(1);
+        }
     };
 
-    payload_with_boolean.into()
+    // Start the server.
+    http::serve(db).await;
 }

@@ -43,6 +43,23 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
         <FieldGroup>
           <FormField
             control={control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome de Usuário</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Insira o seu nome de usuário"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
             name="email"
             render={({ field }) => (
               <FormItem>

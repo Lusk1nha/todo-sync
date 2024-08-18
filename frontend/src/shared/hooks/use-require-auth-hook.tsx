@@ -1,19 +1,7 @@
-import { RoutesEnum } from "../enums/routes-enum";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
-export const useRequireAuth = () => {
+export const useIsAuthenticated = () => {
   const { user } = {
-    user: true,
+    user: false,
   };
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    console.log("useRequireAuth", user);
-
-    if (!user) {
-      navigate(RoutesEnum.AUTH);
-    }
-  }, [user, location]);
+  return user;
 };

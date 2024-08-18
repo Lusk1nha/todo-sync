@@ -12,11 +12,21 @@ import {
   RegisterUserSchemaType,
 } from "@/shared/schemas/register-user-schema";
 import { LogoMark } from "@/components/logo-mark/logo-mark";
+import { AuthenticationService } from "@/shared/services/authentication-service";
 
 export default function RegisterUserRoute() {
-  function handleRegister(data: RegisterUserSchemaType) {
+  const { createUser } = new AuthenticationService();
+
+  async function handleRegister(data: RegisterUserSchemaType) {
     RegisterUserSchema.parse(data);
-    console.log(data);
+
+    const newUser = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+
+    await createUser(newUser);
   }
 
   return (

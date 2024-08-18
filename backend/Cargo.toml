@@ -2,11 +2,34 @@
 name = "todo-sync-backend"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Lucas Pedro da Hora <lucaspedro517@gmail.com>"]
+description = "A simple todo list backend"
 
 [dependencies]
-axum = "0.7.5"
+axum = { version = "0.7.5", features = ["tower-log"] }
+tokio = { version = "1.39.3", features = ["full"] }
+sqlx = { version = "0.8.0", features = [
+  "runtime-async-std-native-tls",
+  "postgres",
+  "uuid",
+  "chrono",
+] }
+
+dotenv = "0.15.0"
+
 serde = { version = "1.0.208", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.39.3", features = ["full"] }
+
+# Axum builds on the types in Tower
+tower = "0.5.0"
+tower-http = { version = "0.5.2", features = ["trace", "cors"] }
+
+# Utility Crates
+uuid = { version = "1.10.0", features = ["serde", "v4"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+env_logger = "0.11.5"
+anyhow = "1.0.86"
+thiserror = "1.0.63"
+argon2 = "0.5.3"
+rand = "0.8.5"
+
