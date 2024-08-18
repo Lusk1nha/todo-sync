@@ -1,5 +1,6 @@
-import { DevText } from "@/components/utilities/dev-text/dev-text";
-import { RegisterUserForm } from "@/components/forms/register-user-form/register-user-form";
+import { ForgotUserForm } from "@/components/forms/forgot-user-form/forgot-user-form";
+import { LogoMark } from "@/components/logo-mark/logo-mark";
+
 import {
   Card,
   CardHeader,
@@ -7,28 +8,28 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { DevText } from "@/components/utilities/dev-text/dev-text";
 import {
-  RegisterUserSchema,
-  RegisterUserSchemaType,
-} from "@/shared/schemas/register-user-schema";
-import { LogoMark } from "@/components/logo-mark/logo-mark";
+  ForgotUserSchema,
+  ForgotUserSchemaType,
+} from "@/shared/schemas/forgot-user-schema";
 
-export default function RegisterUserRoute() {
-  function handleRegister(data: RegisterUserSchemaType) {
-    RegisterUserSchema.parse(data);
+export default function ForgotUserRoute() {
+  function handleResetPassword(data: ForgotUserSchemaType) {
+    ForgotUserSchema.parse(data);
+
     console.log(data);
   }
 
   return (
     <div className="max-w-[420px] w-full flex flex-col items-center justify-center gap-8">
       <LogoMark />
-
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Cadastrar nova conta</CardTitle>
+          <CardTitle>Resetar senha da conta</CardTitle>
         </CardHeader>
         <CardContent>
-          <RegisterUserForm onSubmit={handleRegister} />
+          <ForgotUserForm onSubmit={handleResetPassword} />
         </CardContent>
         <CardFooter className="flex items-center justify-center text-center">
           <p className="text-xs font-medium">

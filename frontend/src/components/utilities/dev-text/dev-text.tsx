@@ -9,7 +9,7 @@ export function DevText(props: Readonly<IDevTextProps>) {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <a
           className="text-primary hover:underline"
           target="_blank"
