@@ -1,5 +1,5 @@
 use axum::http::StatusCode;
-use axum::routing::post;
+use axum::routing::{get, post};
 use axum::{Extension, Json, Router};
 
 use serde::{Deserialize, Serialize};
@@ -15,6 +15,7 @@ pub fn router() -> Router {
     Router::new()
         .route("/users", post(create_user))
         .route("/users/login", post(login_user))
+        .route("/users", get(get_users))
 }
 
 #[derive(Deserialize)]
@@ -74,7 +75,7 @@ pub async fn create_user(
 pub async fn login_user(
     ctx: Extension<ApiContext>,
     Json(req): Json<LoginUserSchema>,
-) -> Result<Json<User>, StatusCode> {
+) -> Result<Json<User>, sqlx::Error> {
     let user = match sqlx::query!(
         r#"SELECT user_id, email, username, password_hash FROM users WHERE email = $1"#,
         req.email.clone()
@@ -85,7 +86,7 @@ pub async fn login_user(
         Ok(user) => user,
         Err(err) => {
             println!("🔥 Failed to login user: {:?}", err);
-            return Err(StatusCode::INTERNAL_SERVER_ERROR);
+            return Err(err);
         }
     };
 
@@ -94,7 +95,7 @@ pub async fn login_user(
     match verify_password(req.password, user.password_hash) {
         Ok(value) => {
             if !value {
-                return Err(StatusCode::UNAUTHORIZED);
+                return Err(sqlx::Error::RowNotFound);
             }
 
             Ok(Json(User {
@@ -104,8 +105,12 @@ pub async fn login_user(
                 token: "token".to_string(),
             }))
         }
-        Err(_err) => Err(StatusCode::UNAUTHORIZED),
+        Err(_err) => Err(sqlx::Error::RowNotFound),
     }
+}
+
+async fn get_users(ctx: Extension<ApiContext>) -> Result<Json<Vec<User>>, StatusCode> {
+    Ok(Json(Vec::new()))
 }
 
 fn hash_password(password: String) -> Result<String, argon2::password_hash::Error> {

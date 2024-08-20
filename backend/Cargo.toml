@@ -2,6 +2,7 @@
 name = "todo-sync-backend"
 version = "0.1.0"
 edition = "2021"
+publish = false
 authors = ["Lucas Pedro da Hora <lucaspedro517@gmail.com>"]
 description = "A simple todo list backend"
 
@@ -20,9 +21,15 @@ dotenv = "0.15.0"
 serde = { version = "1.0.208", features = ["derive"] }
 serde_json = "1.0"
 
+clap = { version = "4.5.16", features = ["derive", "env"] }
+
 # Axum builds on the types in Tower
 tower = "0.5.0"
 tower-http = { version = "0.5.2", features = ["trace", "cors"] }
+
+# State of the art password hashing.
+argon2 = "0.5.3"
+
 
 # Utility Crates
 uuid = { version = "1.10.0", features = ["serde", "v4"] }
@@ -30,6 +37,4 @@ chrono = { version = "0.4.38", features = ["serde"] }
 env_logger = "0.11.5"
 anyhow = "1.0.86"
 thiserror = "1.0.63"
-argon2 = "0.5.3"
 rand = "0.8.5"
-

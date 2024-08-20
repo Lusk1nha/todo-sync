@@ -1,16 +1,16 @@
 import {
-  AuthenticationRepo,
+  UsersRepo,
   ICreateUser,
   ILoginUser,
-} from "@/shared/repositories/authentication-repo";
+} from "@/shared/repositories/users-repo";
 import { User } from "@/shared/factories/user-factory";
-import { AuthenticationModel } from "@/shared/models/authentication-model";
+import { UsersModel } from "@/shared/models/users-model";
 
-export class AuthenticationService implements AuthenticationModel {
-  private _repository: AuthenticationRepo;
+export class UsersService implements UsersModel {
+  private _repository: UsersRepo;
 
   constructor() {
-    this._repository = new AuthenticationRepo();
+    this._repository = new UsersRepo();
 
     this.createUser = this.createUser.bind(this);
     this.loginUser = this.loginUser.bind(this);

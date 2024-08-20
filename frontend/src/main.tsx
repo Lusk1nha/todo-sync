@@ -20,6 +20,10 @@ import LoginRoute from "./routes/login-user-route";
 import RegisterUserRoute from "./routes/register-user-route";
 import ProtectedAuthRoute from "./routes/protected-auth";
 import HomeRoute from "./routes/home-route";
+import { queryClient } from "./shared/helpers/react-query-helper";
+
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "./components/ui/toaster";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,10 +46,13 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="system" storageKey="todo-sync-ui-theme">
-      <TooltipProvider>
-        <RouterProvider router={router} />
-      </TooltipProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system" storageKey="todo-sync-ui-theme">
+        <TooltipProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

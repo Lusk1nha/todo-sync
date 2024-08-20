@@ -12,10 +12,10 @@ import {
   RegisterUserSchemaType,
 } from "@/shared/schemas/register-user-schema";
 import { LogoMark } from "@/components/logo-mark/logo-mark";
-import { AuthenticationService } from "@/shared/services/authentication-service";
+import { UsersService } from "@/shared/services/users-service";
 
 export default function RegisterUserRoute() {
-  const { createUser } = new AuthenticationService();
+  const { createUser } = new UsersService();
 
   async function handleRegister(data: RegisterUserSchemaType) {
     RegisterUserSchema.parse(data);

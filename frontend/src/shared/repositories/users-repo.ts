@@ -21,20 +21,21 @@ export interface ILoginUser {
   password: string;
 }
 
-export class AuthenticationRepo {
-  private _API_URL = "http://localhost:8080/users";
+export class UsersRepo {
+  private _API_URL = "http://localhost:8080/api";
 
   async createNewUser(data: ICreateUser): Promise<string> {
-    const response = await axios.post<string>(this._API_URL, data);
+    const endpoint = `${this._API_URL}/users`;
+
+    const response = await axios.post<string>(endpoint, data);
 
     return response.data;
   }
 
   async loginUser(data: ILoginUser): Promise<IUserResponse> {
-    const response = await axios.post<IUserResponse>(
-      `${this._API_URL}/login`,
-      data
-    );
+    const endpoint = `${this._API_URL}/login`;
+
+    const response = await axios.post<IUserResponse>(endpoint, data);
 
     return response.data;
   }
