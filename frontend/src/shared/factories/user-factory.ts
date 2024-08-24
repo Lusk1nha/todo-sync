@@ -1,4 +1,4 @@
-import { IUserResponse } from "../repositories/users-repo";
+import { IUserResponse } from "../repositories/auth-repo";
 
 export class User {
   private _user_id: string;

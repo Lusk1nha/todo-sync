@@ -13,17 +13,17 @@ export const RegisterUserSchema = z
     password: z
       .string({
         required_error: "Senha é obrigatória!",
-      })
-      .min(8, "Senha deve ter no mínimo 8 caracteres!")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
-      ),
+      }),
+      // .min(8, "Senha deve ter no mínimo 8 caracteres!")
+      // .regex(
+      //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      //   "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
+      // ),
     confirmPassword: z
       .string({
         required_error: "Confirmação de senha é obrigatória!",
       })
-      .min(8),
+      // .min(8),
   })
   .refine(
     (data) => {

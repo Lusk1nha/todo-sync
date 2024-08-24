@@ -15,14 +15,15 @@ import {
   LoginUserSchema,
   LoginUserSchemaType,
 } from "@/shared/schemas/login-user-schema";
-import { UsersService } from "@/shared/services/users-service";
+import { AuthService } from "@/shared/services/auth-service";
 import { useMutation } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 
 export default function LoginRoute() {
-  const { loginUser } = new UsersService();
+  const { login } = new AuthService();
+
   const { mutate, error, reset, isPending, isError } = useMutation({
-    mutationFn: loginUser,
+    mutationFn: login,
     onError: (error) => {
       console.error(error);
     },

@@ -7,34 +7,31 @@ authors = ["Lucas Pedro da Hora <lucaspedro517@gmail.com>"]
 description = "A simple todo list backend"
 
 [dependencies]
-axum = { version = "0.7.5", features = ["tower-log"] }
+axum = { version = "0.7.5", features = ["tower-log", "json"] }
+axum-extra = { version = "0.9.3", features = ["cookie-private"] }
+
+tower = "0.5.0"
 tokio = { version = "1.39.3", features = ["full"] }
+
+http = "1.1.0"
+
 sqlx = { version = "0.8.0", features = [
   "runtime-async-std-native-tls",
   "postgres",
-  "uuid",
-  "chrono",
 ] }
 
 dotenv = "0.15.0"
+env_logger = "0.11.5"
 
+regex = "1.10.6"
 serde = { version = "1.0.208", features = ["derive"] }
 serde_json = "1.0"
 
-clap = { version = "4.5.16", features = ["derive", "env"] }
-
 # Axum builds on the types in Tower
-tower = "0.5.0"
 tower-http = { version = "0.5.2", features = ["trace", "cors"] }
 
-# State of the art password hashing.
-argon2 = "0.5.3"
+time = "0.3.36"
 
-
-# Utility Crates
-uuid = { version = "1.10.0", features = ["serde", "v4"] }
-chrono = { version = "0.4.38", features = ["serde"] }
-env_logger = "0.11.5"
-anyhow = "1.0.86"
-thiserror = "1.0.63"
+# For hashing passwords
+bcrypt = "0.15.1"
 rand = "0.8.5"
