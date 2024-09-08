@@ -14,6 +14,7 @@ export class AuthService implements AuthModel {
 
     this.signup = this.signup.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   async signup(data: ISignUpRequest): Promise<void> {
@@ -21,7 +22,18 @@ export class AuthService implements AuthModel {
   }
 
   async login(data: ILoginUser): Promise<User> {
-    const user = await this._repository.login(data);
+    const email = data.email.trim();
+    const password = data.password.trim();
+
+    const user = await this._repository.login({
+      email,
+      password,
+    });
+
     return new User(user);
+  }
+
+  async logout(): Promise<void> {
+    await this._repository.logout();
   }
 }

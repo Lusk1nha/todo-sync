@@ -16,7 +16,8 @@ use http::{
 };
 
 use crate::{
-    authentication::{login, logout, signup, validate_session},
+    authentication::{auth, logout, post_login, post_logout, post_signup},
+    responses::logout_response,
     AppState,
 };
 
@@ -27,34 +28,21 @@ pub async fn create_router(state: AppState) -> Router {
 }
 
 pub fn api_router(state: AppState) -> Router {
-    let cors = get_cors(&state);
-
-    let users_router = users_router(state.clone());
     let auth_router = auth_router();
 
     Router::new()
         .route("/health", get(health_check))
-        .nest("/users", users_router)
         .nest("/auth", auth_router)
         .with_state(state)
-        .layer(CorsLayer::permissive())
+        .layer(CorsLayer::very_permissive())
         .layer(TraceLayer::new_for_http())
 }
 
 pub fn auth_router() -> Router<AppState> {
     Router::new()
-        .route("/signup", post(signup))
-        .route("/login", post(login))
-        .route("/logout", post(logout))
-}
-
-pub fn users_router(state: AppState) -> Router<AppState> {
-    Router::new()
-        .route("/", get(get_users))
-        .route_layer(middleware::from_fn_with_state(
-            state.clone(),
-            validate_session,
-        ))
+        .route("/signup", post(post_signup))
+        .route("/login", post(post_login))
+        .route("/logout", post(post_logout))
 }
 
 #[derive(sqlx::FromRow, Deserialize, Serialize)]
@@ -63,15 +51,6 @@ pub struct User {
     username: String,
     email: String,
     password: String,
-}
-
-pub async fn get_users(State(state): State<AppState>) -> Json<Vec<User>> {
-    let users: Vec<User> = sqlx::query_as("SELECT * FROM users")
-        .fetch_all(&state.postgres)
-        .await
-        .unwrap();
-
-    Json(users)
 }
 
 pub fn get_cors(state: &AppState) -> CorsLayer {

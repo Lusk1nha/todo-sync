@@ -24,12 +24,17 @@ import { queryClient } from "./shared/helpers/react-query-helper";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
+import { LoggedRoute } from "./routes/logged-route";
+import { WizardPage } from "./routes/wizard-page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={RoutesEnum.ROOT} element={<App />}>
       <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
-        <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+        <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
+        <Route path={RoutesEnum.ROOT} element={<LoggedRoute />}>
+          <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+        </Route>
       </Route>
 
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>

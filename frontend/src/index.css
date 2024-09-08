@@ -63,6 +63,7 @@
   * {
     @apply border-border;
     @apply font-sans;
+    @apply box-border;
   }
   #root {
     @apply flex flex-col h-screen min-h-screen;

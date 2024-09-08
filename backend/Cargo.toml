@@ -14,11 +14,14 @@ tower = "0.5.0"
 tokio = { version = "1.39.3", features = ["full"] }
 
 http = "1.1.0"
+http-body = "1.0.1"
 
 sqlx = { version = "0.8.0", features = [
   "runtime-async-std-native-tls",
   "postgres",
 ] }
+
+syn = "2.0.76"
 
 dotenv = "0.15.0"
 env_logger = "0.11.5"
@@ -35,3 +38,4 @@ time = "0.3.36"
 # For hashing passwords
 bcrypt = "0.15.1"
 rand = "0.8.5"
+cookie = "0.18.1"

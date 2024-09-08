@@ -20,9 +20,9 @@ import { useMutation } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 
 export default function LoginRoute() {
-  const { login } = new AuthService();
+  const { login, logout } = new AuthService();
 
-  const { mutate, error, reset, isPending, isError } = useMutation({
+  const { mutate, reset, isPending, isError } = useMutation({
     mutationFn: login,
     onError: (error) => {
       console.error(error);
@@ -32,6 +32,10 @@ export default function LoginRoute() {
   async function handleLogin(data: LoginUserSchemaType) {
     LoginUserSchema.parse(data);
     mutate(data);
+  }
+
+  async function handleLogout() {
+    await logout();
   }
 
   if (isError) {
@@ -87,6 +91,9 @@ export default function LoginRoute() {
         </CardHeader>
         <CardContent>
           <LoginUserForm onSubmit={handleLogin} />
+          <button type="button" onClick={handleLogout}>
+            Logout
+          </button>
         </CardContent>
         <CardFooter className="flex items-center justify-center text-center">
           <p className="text-xs font-medium">

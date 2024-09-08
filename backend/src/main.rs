@@ -1,5 +1,7 @@
 mod authentication;
 mod database;
+mod errors;
+mod responses;
 mod router;
 mod utils;
 
@@ -26,6 +28,10 @@ impl FromRef<AppState> for Key {
         state.key.clone()
     }
 }
+
+type Database = sqlx::PgPool;
+const USER_COOKIE_NAME: &str = "user_token";
+const COOKIE_MAX_AGE: &str = "9999999";
 
 #[tokio::main]
 async fn main() {
