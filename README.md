@@ -1,4 +1,4 @@
-# Task Management Application
+# Todo Sync (Task Management Application) - UNDER CONSTRUCTION
 [Click here to access the app (currently available only in Portuguese)](https://todo-sync-frontend.vercel.app/)
 
 ## 📑 Quick Links
