@@ -1,44 +1,65 @@
 import { LoginUserForm } from "@/components/forms/login-user-form/login-user-form";
-import { LogoMark } from "@/components/logo-mark/logo-mark";
+import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
+import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
+
+import { useToast } from "@/components/ui/use-toast";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DevText } from "@/components/utilities/dev-text/dev-text";
-import {
-  LoginUserSchema,
-  LoginUserSchemaType,
-} from "@/shared/schemas/login-user-schema";
-import { AuthenticationService } from "@/shared/services/authentication-service";
+  getRequestLogin,
+  validateLogin,
+} from "@/shared/helpers/login-user-helper";
+import { LoginUserSchemaType } from "@/shared/schemas/login-user-schema";
+import { AuthService } from "@/shared/services/auth-service";
+import { useMutation } from "@tanstack/react-query";
+import { AuthCard } from "./auth-route/auth-card";
 
 export default function LoginRoute() {
-  const { loginUser } = new AuthenticationService();
+  const { login } = new AuthService();
+  const { toast } = useToast();
 
-  async function handleLogin(data: LoginUserSchemaType) {
-    LoginUserSchema.parse(data);
-    await loginUser(data);
+  const { mutate, reset, isPending, isError, error } = useMutation({
+    mutationFn: handleLogin,
+    onSuccess() {
+      toast({
+        title: "Entrou no sistema",
+        description: "Bem vindo de volta",
+        variant: "default",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao entrar no sistema",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  async function handleLogin(data: LoginUserSchemaType): Promise<void> {
+    validateLogin(data);
+
+    const user = getRequestLogin(data);
+    await login(user);
+  }
+
+  if (isError && error) {
+    return (
+      <AuthCard title="Erro ao entrar no sistema">
+        <ErrorFormReturn error={error} onReturn={reset} />
+      </AuthCard>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <AuthCard>
+        <LoadingFormReturn label="Entrando no sistema" />
+      </AuthCard>
+    );
   }
 
   return (
-    <div className="max-w-[420px] w-full flex flex-col items-center justify-center gap-8">
-      <LogoMark />
-
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Entrar no sistema</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LoginUserForm onSubmit={handleLogin} />
-        </CardContent>
-        <CardFooter className="flex items-center justify-center text-center">
-          <p className="text-xs font-medium">
-            Developed by <DevText>Lucas Pedro</DevText>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+    <AuthCard title="Entrar no Sistema">
+      <LoginUserForm onSubmit={mutate} />
+    </AuthCard>
   );
 }

@@ -1,5 +1,6 @@
 export enum RoutesEnum {
   ROOT = "/",
+  WIZARD = "/user-settings",
   HOME = "/home",
   AUTH = "/auth",
   LOGIN = "/auth/login",

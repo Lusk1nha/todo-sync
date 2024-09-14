@@ -1,51 +1,74 @@
-import { DevText } from "@/components/utilities/dev-text/dev-text";
 import { RegisterUserForm } from "@/components/forms/register-user-form/register-user-form";
+
+import { RegisterUserSchemaType } from "@/shared/schemas/register-user-schema";
+
+import { AuthService } from "@/shared/services/auth-service";
+import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import {
-  RegisterUserSchema,
-  RegisterUserSchemaType,
-} from "@/shared/schemas/register-user-schema";
-import { LogoMark } from "@/components/logo-mark/logo-mark";
-import { AuthenticationService } from "@/shared/services/authentication-service";
+  getRequestSignUp,
+  validateSignUp,
+} from "@/shared/helpers/register-user-helper";
+
+import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
+import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
+import { AuthCard } from "./auth-route/auth-card";
 
 export default function RegisterUserRoute() {
-  const { createUser } = new AuthenticationService();
+  const { signup } = new AuthService();
+  const { toast } = useToast();
 
-  async function handleRegister(data: RegisterUserSchemaType) {
-    RegisterUserSchema.parse(data);
+  const { mutate, reset, isPending, isError, error } = useMutation({
+    mutationFn: handleRegister,
+    onSuccess() {
+      toast({
+        title: "Usuário criado",
+        description: "Bem vindo ao sistema",
+        variant: "default",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao se cadastrar",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
-    const newUser = {
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    };
+  async function handleRegister(data: RegisterUserSchemaType): Promise<void> {
+    validateSignUp(data);
 
-    await createUser(newUser);
+    const user = getRequestSignUp(data);
+    await signup(user);
+  }
+
+  if (isError && error) {
+    return (
+      <AuthCard>
+        <ErrorFormReturn
+          error={error}
+          onReturn={reset}
+          strings={{
+            errorTitle: "Erro ao se cadastrar no sistema",
+            returnButton: "Tentar novamente",
+          }}
+        />
+      </AuthCard>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <AuthCard>
+        <LoadingFormReturn label="Criando usuário" />
+      </AuthCard>
+    );
   }
 
   return (
-    <div className="max-w-[420px] w-full flex flex-col items-center justify-center gap-8">
-      <LogoMark />
-
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Cadastrar nova conta</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RegisterUserForm onSubmit={handleRegister} />
-        </CardContent>
-        <CardFooter className="flex items-center justify-center text-center">
-          <p className="text-xs font-medium">
-            Developed by <DevText>Lucas Pedro</DevText>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+    <AuthCard title="Cadastrar no Sistema">
+      <RegisterUserForm onSubmit={mutate} />
+    </AuthCard>
   );
 }
