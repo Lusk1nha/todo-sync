@@ -1,8 +1,12 @@
 # Task Management Application
 
-## 🇺🇸 English
+## 📑 Quick Links
+- [🇧🇷 Português](#-português)
+- [🇺🇸 English](#-english)
 
-This is a **Task Management Application** designed to streamline the organization and handling of tasks. The application uses a modern tech stack, combining a React-based frontend with a Rust backend for high performance and scalability.
+## ![US](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/us.png "United States") English
+
+This is a **Todo Sync** designed to streamline the organization and handling of tasks. The application uses a modern tech stack, combining a React-based frontend with a Rust backend for high performance and scalability.
 
 ### Motivation
 
@@ -64,9 +68,9 @@ The application is continuously evolving. Upcoming features include:
 
 ---
 
-## 🇧🇷 Português
+## ![Brasil](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png "Brasil") Português
 
-Este é um **Aplicativo de Gerenciamento de Tarefas** projetado para otimizar a organização e o gerenciamento de tarefas. O aplicativo utiliza uma pilha tecnológica moderna, combinando um frontend baseado em React com um backend em Rust, garantindo alto desempenho e escalabilidade.
+Este é um **Todo Sync** projetado para otimizar a organização e o gerenciamento de tarefas. O aplicativo utiliza uma pilha tecnológica moderna, combinando um frontend baseado em React com um backend em Rust, garantindo alto desempenho e escalabilidade.
 
 ### Motivo
 
