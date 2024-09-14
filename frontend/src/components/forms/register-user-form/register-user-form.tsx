@@ -43,29 +43,21 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
         <FieldGroup>
           <FormField
             control={control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome de Usuário</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Insira o seu nome de usuário"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={control}
             name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Insira o e-mail" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="Insira o e-mail"
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                    autoComplete="email"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,7 +74,12 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
                   <Input
                     type="password"
                     placeholder="Insira a senha"
-                    {...field}
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                    autoComplete="password"
                   />
                 </FormControl>
                 <FormMessage />
@@ -100,7 +97,12 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
                   <Input
                     type="password"
                     placeholder="Insira a confirmação da senha"
-                    {...field}
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                    autoComplete="current-password"
                   />
                 </FormControl>
                 <FormMessage />
@@ -111,7 +113,12 @@ export function RegisterUserForm(props: Readonly<IRegisterUserFormProps>) {
 
         <div className="flex flex-col gap-2">
           <Button type="submit">Criar nova conta</Button>
-          <Button variant="outline" onClick={handleNavigateLogin}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleNavigateLogin}
+            className="whitespace-normal h-fit"
+          >
             Já possui conta? Clique aqui para entrar!
           </Button>
         </div>

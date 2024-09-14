@@ -1,29 +1,27 @@
 import { z } from "zod";
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from "../constants";
 
 export const RegisterUserSchema = z
   .object({
-    username: z.string({
-      required_error: "Nome de usuário é obrigatório!",
-    }),
     email: z
       .string({
         required_error: "E-mail é obrigatório!",
       })
       .email("E-mail inválido!"),
+
     password: z
       .string({
         required_error: "Senha é obrigatória!",
-      }),
-      // .min(8, "Senha deve ter no mínimo 8 caracteres!")
-      // .regex(
-      //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      //   "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
-      // ),
-    confirmPassword: z
-      .string({
-        required_error: "Confirmação de senha é obrigatória!",
       })
-      // .min(8),
+      .min(PASSWORD_MIN_LENGTH, "Senha deve ter no mínimo 8 caracteres!")
+      .regex(
+        PASSWORD_REGEX,
+        "Senha deve conter ao menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial!"
+      ),
+
+    confirmPassword: z.string({
+      required_error: "Confirmação de senha é obrigatória!",
+    }),
   })
   .refine(
     (data) => {

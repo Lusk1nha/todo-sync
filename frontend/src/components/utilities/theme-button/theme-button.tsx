@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/shared/hooks/use-theme-hook";
+import { motion } from "framer-motion";
 
 export function ThemeButton() {
   const { setTheme } = useTheme();
@@ -15,10 +16,16 @@ export function ThemeButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+        <Button variant="outline" size="icon" className="group">
+          <motion.div
+            className="flex items-center justify-center"
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Sun className="h-[1.2rem] w-[1.2rem] flex transition-all dark:hidden" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] hidden transition-all dark:flex" />
+          </motion.div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

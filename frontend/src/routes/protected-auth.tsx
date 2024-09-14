@@ -3,8 +3,7 @@ import { useIsAuthenticated } from "@/shared/hooks/use-require-auth-hook";
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function ProtectedAuthRoute() {
-  // const isAuthenticated = useIsAuthenticated();
-  const isAuthenticated = true;
+  const isAuthenticated = useIsAuthenticated();
 
   if (!isAuthenticated) return <Navigate to={RoutesEnum.LOGIN} />;
 

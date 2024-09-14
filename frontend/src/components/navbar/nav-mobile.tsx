@@ -2,7 +2,7 @@ import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
-import { LogoMark, LogoMarkMobile } from "../logo-mark/logo-mark";
+import { LogoMark } from "../logo-mark/logo-mark";
 import { NavRedirects, NavRouteLink } from "./nav-redirects";
 import { NavButtons } from "./nav-buttons";
 
@@ -25,7 +25,7 @@ export function MobileNavbar(props: Readonly<IMobileNavbarProps>) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <LogoMark className="text-xl md:text-2xl" />
+            <LogoMark className="text-xl md:text-2xl" isPulsing />
             <div className="flex flex-col gap-1 pt-4">
               <NavRedirects routes={routes} onClick={() => setIsOpen(false)} />
             </div>
@@ -33,8 +33,9 @@ export function MobileNavbar(props: Readonly<IMobileNavbarProps>) {
         </Sheet>
 
         <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
-          <LogoMarkMobile />
+          <LogoMark />
         </div>
+
         <div className="flex items-center gap-2">
           <NavButtons />
         </div>

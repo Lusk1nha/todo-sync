@@ -1,67 +1,50 @@
-import { AuthCard } from "@/components/auth-card/auth-card";
 import { LoginUserForm } from "@/components/forms/login-user-form/login-user-form";
+import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
+import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
 
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { DevText } from "@/components/utilities/dev-text/dev-text";
-import {
-  LoginUserSchema,
-  LoginUserSchemaType,
-} from "@/shared/schemas/login-user-schema";
+  getRequestLogin,
+  validateLogin,
+} from "@/shared/helpers/login-user-helper";
+import { LoginUserSchemaType } from "@/shared/schemas/login-user-schema";
 import { AuthService } from "@/shared/services/auth-service";
 import { useMutation } from "@tanstack/react-query";
-import { AlertCircle } from "lucide-react";
+import { AuthCard } from "./auth-route/auth-card";
 
 export default function LoginRoute() {
-  const { login, logout } = new AuthService();
+  const { login } = new AuthService();
+  const { toast } = useToast();
 
-  const { mutate, reset, isPending, isError } = useMutation({
-    mutationFn: login,
+  const { mutate, reset, isPending, isError, error } = useMutation({
+    mutationFn: handleLogin,
+    onSuccess() {
+      toast({
+        title: "Entrou no sistema",
+        description: "Bem vindo de volta",
+        variant: "default",
+      });
+    },
     onError: (error) => {
-      console.error(error);
+      toast({
+        title: "Erro ao entrar no sistema",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
-  async function handleLogin(data: LoginUserSchemaType) {
-    LoginUserSchema.parse(data);
-    mutate(data);
+  async function handleLogin(data: LoginUserSchemaType): Promise<void> {
+    validateLogin(data);
+
+    const user = getRequestLogin(data);
+    await login(user);
   }
 
-  async function handleLogout() {
-    await logout();
-  }
-
-  if (isError) {
+  if (isError && error) {
     return (
-      <AuthCard>
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Erro ao entrar no sistema</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-4">
-              <div className="w-full h-56 flex flex-col items-center justify-center gap-2">
-                <AlertCircle className="text-destructive w-16 h-16" />
-                <div className="flex flex-col gap-1 text-center">
-                  <p className="text-sm font-medium">
-                    Ocorreu um erro inesperado ao tentar entrar no sistema
-                  </p>
-                </div>
-              </div>
-
-              <Button type="button" onClick={reset}>
-                Voltar para tela de login
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <AuthCard title="Erro ao entrar no sistema">
+        <ErrorFormReturn error={error} onReturn={reset} />
       </AuthCard>
     );
   }
@@ -69,38 +52,14 @@ export default function LoginRoute() {
   if (isPending) {
     return (
       <AuthCard>
-        <Card className="w-full">
-          <CardContent>
-            <div className="w-full h-56 flex flex-col items-center justify-center gap-2">
-              <LoadingSpinner />
-              <p>
-                <span className="font-medium">Entrando no sistema</span>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <LoadingFormReturn label="Entrando no sistema" />
       </AuthCard>
     );
   }
 
   return (
-    <AuthCard>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Entrar no sistema</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LoginUserForm onSubmit={handleLogin} />
-          <button type="button" onClick={handleLogout}>
-            Logout
-          </button>
-        </CardContent>
-        <CardFooter className="flex items-center justify-center text-center">
-          <p className="text-xs font-medium">
-            Developed by <DevText>Lucas Pedro</DevText>
-          </p>
-        </CardFooter>
-      </Card>
+    <AuthCard title="Entrar no Sistema">
+      <LoginUserForm onSubmit={mutate} />
     </AuthCard>
   );
 }

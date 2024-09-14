@@ -1,8 +1,7 @@
 import axios from "axios";
 
-export interface IUserResponse {
+export interface IAuthResponse {
   user_id: string;
-  username: string;
   email: string;
   token: string;
 
@@ -11,7 +10,6 @@ export interface IUserResponse {
 }
 
 export interface ISignUpRequest {
-  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -23,10 +21,10 @@ export interface ILoginUser {
 }
 
 export class AuthRepo {
-  private _API_URL = "http://localhost:8080/api";
+  private _API_URL = "http://localhost:8080/api/auth";
 
   async signup(data: ISignUpRequest): Promise<void> {
-    const endpoint = `${this._API_URL}/auth/signup`;
+    const endpoint = `${this._API_URL}/signup`;
 
     await axios.post<string>(endpoint, data, {
       headers: {
@@ -36,10 +34,10 @@ export class AuthRepo {
     });
   }
 
-  async login(data: ILoginUser): Promise<IUserResponse> {
-    const endpoint = `${this._API_URL}/auth/login`;
+  async login(data: ILoginUser): Promise<IAuthResponse> {
+    const endpoint = `${this._API_URL}/login`;
 
-    const response = await axios.post<IUserResponse>(endpoint, data, {
+    const response = await axios.post<IAuthResponse>(endpoint, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,8 +47,16 @@ export class AuthRepo {
     return response.data;
   }
 
+  async forgot(email: string): Promise<void> {
+    const endpoint = `${this._API_URL}/forgot`;
+
+    await axios.post<void>(endpoint, {
+      email,
+    });
+  }
+
   async logout(): Promise<void> {
-    const endpoint = `${this._API_URL}/auth/logout`;
+    const endpoint = `${this._API_URL}/logout`;
 
     await axios.post<void>(endpoint, {
       headers: {

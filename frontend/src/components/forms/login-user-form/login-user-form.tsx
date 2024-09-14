@@ -55,7 +55,15 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="Insira o e-mail" {...field} />
+                  <Input
+                    type="email"
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                    placeholder="Insira o e-mail"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -80,8 +88,13 @@ export function LoginUserForm(props: Readonly<ILoginUserFormProps>) {
                 <FormControl>
                   <Input
                     type="password"
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
                     placeholder="Insira a senha"
-                    {...field}
+                    autoComplete="password"
                   />
                 </FormControl>
                 <FormMessage />
