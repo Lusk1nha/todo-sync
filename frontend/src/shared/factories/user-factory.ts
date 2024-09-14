@@ -1,10 +1,10 @@
-import { IUserResponse } from "../repositories/authentication-repo";
+import { IUserResponse } from "../repositories/users-repo";
 
 export class User {
   private _user_id: string;
   private _username: string;
+  private _birthday: Date;
   private _email: string;
-  private _token: string;
 
   private _created_at: Date;
   private _updated_at: Date;
@@ -13,7 +13,7 @@ export class User {
     this._user_id = data.user_id;
     this._username = data.username;
     this._email = data.email;
-    this._token = data.token;
+    this._birthday = new Date(data.birthday);
 
     this._created_at = new Date(data.created_at);
     this._updated_at = new Date(data.updated_at);
@@ -31,8 +31,8 @@ export class User {
     return this._email;
   }
 
-  get token(): string {
-    return this._token;
+  get birthday(): Date {
+    return this._birthday;
   }
 
   get created_at(): Date {

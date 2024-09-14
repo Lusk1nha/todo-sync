@@ -1,42 +1,65 @@
 import { ForgotUserForm } from "@/components/forms/forgot-user-form/forgot-user-form";
-import { LogoMark } from "@/components/logo-mark/logo-mark";
+import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
+import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
+import { useToast } from "@/components/ui/use-toast";
+import { validateForgotUser } from "@/shared/helpers/forgot-user-helper";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { DevText } from "@/components/utilities/dev-text/dev-text";
-import {
-  ForgotUserSchema,
-  ForgotUserSchemaType,
-} from "@/shared/schemas/forgot-user-schema";
+import { ForgotUserSchemaType } from "@/shared/schemas/forgot-user-schema";
+import { AuthService } from "@/shared/services/auth-service";
+import { useMutation } from "@tanstack/react-query";
+import { AuthCard } from "./auth-route/auth-card";
 
 export default function ForgotUserRoute() {
-  function handleResetPassword(data: ForgotUserSchemaType) {
-    ForgotUserSchema.parse(data);
+  const { forgot } = new AuthService();
+  const { toast } = useToast();
 
-    console.log(data);
+  const { mutate, reset, isPending, isError, error } = useMutation({
+    mutationFn: handleForgotPassword,
+    onError: (error) => {
+      toast({
+        title: "Erro ao resetar senha",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Senha resetada",
+        description: "Um email foi enviado para você com as instruções",
+        variant: "default",
+      });
+    },
+    retry: 2,
+  });
+
+  async function handleForgotPassword(
+    data: ForgotUserSchemaType
+  ): Promise<void> {
+    validateForgotUser(data);
+
+    const email = data.email;
+    await forgot(email);
+  }
+
+  if (isError && error) {
+    return (
+      <AuthCard title="Erro ao resetar senha">
+        <ErrorFormReturn error={error} onReturn={reset} />
+      </AuthCard>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <AuthCard>
+        <LoadingFormReturn label="Resetando senha" />
+      </AuthCard>
+    );
   }
 
   return (
-    <div className="max-w-[420px] w-full flex flex-col items-center justify-center gap-8">
-      <LogoMark />
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Resetar senha da conta</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ForgotUserForm onSubmit={handleResetPassword} />
-        </CardContent>
-        <CardFooter className="flex items-center justify-center text-center">
-          <p className="text-xs font-medium">
-            Developed by <DevText>Lucas Pedro</DevText>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+    <AuthCard title="Resetar senha da conta">
+      <ForgotUserForm onSubmit={mutate} />
+    </AuthCard>
   );
 }
