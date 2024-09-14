@@ -1,4 +1,5 @@
 # Task Management Application
+[Click here to access the app (currently available only in Portuguese)](https://todo-sync-frontend.vercel.app/)
 
 ## 📑 Quick Links
 - [🇧🇷 Português](#-português)
