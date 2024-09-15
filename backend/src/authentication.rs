@@ -68,7 +68,6 @@ pub struct User {
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct UserSignUpRequest {
-    username: String,
     email: String,
     password: String,
     confirm_password: String,
@@ -100,7 +99,7 @@ pub async fn signup(
     database: &PgPool,
     user: UserSignUpRequest,
 ) -> Result<SessionToken, SignupError> {
-    let user_id: i32 = create_user(database, user.username, user.email, user.password)
+    let user_id: i32 = create_user(database, user.email, user.password)
         .await
         .unwrap();
 
@@ -209,17 +208,15 @@ pub async fn auth(
 
 async fn create_user(
     database: &PgPool,
-    username: String,
     email: String,
     password: String,
 ) -> Result<i32, SignupError> {
     const INSERT_USER: &str =
-        "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id";
+        "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id";
 
     let hashed_password = bcrypt::hash(&password, 10).unwrap();
 
     let fetch_one = sqlx::query_as(INSERT_USER)
-        .bind(username)
         .bind(email)
         .bind(hashed_password)
         .fetch_one(database)
