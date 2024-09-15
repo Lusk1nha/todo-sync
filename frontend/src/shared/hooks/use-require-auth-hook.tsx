@@ -1,7 +1,11 @@
-export const useIsAuthenticated = () => {
-  const { user } = {
-    user: false,
-  };
+import { useCookies } from "react-cookie";
 
-  return user;
+export const useIsAuthenticated = () => {
+  const [cookies] = useCookies(["user"]);
+
+  if (cookies.user) {
+    return true;
+  }
+
+  return false;
 };

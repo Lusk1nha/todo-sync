@@ -56,10 +56,13 @@ export class AuthRepo {
 
   async logout(): Promise<void> {
     const endpoint = `${this._API_URL}/logout`;
+    const cookie = document.cookie;
+    const user = cookie.split("=")[1];
 
-    await axios.post<void>(endpoint, {
+    await axios.post<void>(endpoint, undefined, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: user,
       },
       withCredentials: true,
     });

@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AuthCard } from "./auth-route/auth-card";
 
 export default function LoginRoute() {
-  const { login } = new AuthService();
+  const { login, logout } = new AuthService();
   const { toast } = useToast();
 
   const { mutate, reset, isPending, isError, error } = useMutation({
@@ -60,6 +60,7 @@ export default function LoginRoute() {
   return (
     <AuthCard title="Entrar no Sistema">
       <LoginUserForm onSubmit={mutate} />
+      <button onClick={logout}>sair</button>
     </AuthCard>
   );
 }
