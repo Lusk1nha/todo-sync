@@ -6,7 +6,7 @@ use axum::{
         header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
         HeaderValue, Method, StatusCode,
     },
-    middleware::{self, from_fn, Next},
+    middleware::{from_fn, Next},
     response::IntoResponse,
     routing::{get, post},
     Json, Router,
@@ -17,6 +17,7 @@ use tower_http::cors::CorsLayer;
 use crate::{
     auth::{login, logout, signup},
     auth_token::auth_middleware,
+    users_profile::get_current_user,
     AppState,
 };
 
@@ -26,14 +27,15 @@ const SIGNUP_PATH: &str = "/signup";
 const LOGIN_PATH: &str = "/login";
 const LOGOUT_PATH: &str = "/logout";
 
+const USERS_GROUP_PATH: &str = "/users";
+const USERS_CURRENT_PATH: &str = "/current-user";
+
 const HEALTH_CHECK_PATH: &str = "/health-check";
 
 /// Creates the main application router with CORS configuration.
 pub async fn create_router(app_state: Arc<AppState>) -> Router {
     let routes = api_routes(app_state.clone());
-    Router::new()
-        .nest(API_PATH, routes)
-        .layer(CorsLayer::very_permissive())
+    Router::new().nest(API_PATH, routes).layer(configure_cors())
 }
 
 fn configure_cors() -> CorsLayer {
@@ -64,6 +66,12 @@ fn auth_routes(app_state: Arc<AppState>) -> Router {
         .with_state(app_state)
 }
 
+fn users_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
+    Router::new()
+        .route(USERS_CURRENT_PATH, get(get_current_user))
+        .with_state(app_state)
+}
+
 // Middleware ajustado para aceitar `Arc<AppState>`
 async fn auth_middleware_fn(
     req: Request<axum::body::Body>,
@@ -74,8 +82,11 @@ async fn auth_middleware_fn(
 }
 
 fn protected_routes(app_state: Arc<AppState>) -> Router {
+    let users = users_routes(app_state.clone());
+
     Router::new()
         .route(LOGOUT_PATH, post(logout))
+        .nest(USERS_GROUP_PATH, users)
         .layer(ServiceBuilder::new().layer(from_fn({
             let app_state = app_state.clone(); // Clone app_state for the async block
             move |req, next| {

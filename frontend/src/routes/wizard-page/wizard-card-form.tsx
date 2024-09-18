@@ -9,17 +9,21 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { RoutesEnum } from "@/shared/enums/routes-enum";
 import {
   getRequestUserSettings,
   validateUserSettings,
 } from "@/shared/helpers/user-settings-helper";
 import { UsersSettingsSchemaType } from "@/shared/schemas/users-settings-schema";
-import { UsersService } from "@/shared/services/users-service";
+import { UsersProfilesService } from "@/shared/services/users-profiles-service";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export function WizardCardForm() {
-  const { update } = new UsersService();
+  const { update } = new UsersProfilesService();
   const { toast } = useToast();
+
+  const navigate = useNavigate();
 
   const { mutate, reset, isPending, isError, error } = useMutation({
     mutationFn: handleSave,
@@ -29,6 +33,8 @@ export function WizardCardForm() {
         description: "As configurações foram salvas com sucesso",
         variant: "default",
       });
+
+      navigate(RoutesEnum.HOME);
     },
     onError: (error) => {
       toast({

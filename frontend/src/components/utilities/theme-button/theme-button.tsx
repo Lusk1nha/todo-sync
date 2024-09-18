@@ -10,13 +10,19 @@ import {
 import { useTheme } from "@/shared/hooks/use-theme-hook";
 import { motion } from "framer-motion";
 
-export function ThemeButton() {
+interface IThemeButtonProps {
+  size?: "sm" | "lg" | "default" | "icon" | null | undefined;
+}
+
+export function ThemeButton(props: Readonly<IThemeButtonProps>) {
+  const { size = "icon" } = props;
+
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="group">
+        <Button variant="outline" size={size} className="group">
           <motion.div
             className="flex items-center justify-center"
             initial={{ rotate: 0 }}

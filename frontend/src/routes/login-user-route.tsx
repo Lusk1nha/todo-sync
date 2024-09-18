@@ -11,10 +11,14 @@ import { LoginUserSchemaType } from "@/shared/schemas/login-user-schema";
 import { AuthService } from "@/shared/services/auth-service";
 import { useMutation } from "@tanstack/react-query";
 import { AuthCard } from "./auth-route/auth-card";
+import { useNavigate } from "react-router-dom";
+import { RoutesEnum } from "@/shared/enums/routes-enum";
 
 export default function LoginRoute() {
-  const { login, logout } = new AuthService();
+  const { login } = new AuthService();
   const { toast } = useToast();
+
+  const navigate = useNavigate();
 
   const { mutate, reset, isPending, isError, error } = useMutation({
     mutationFn: handleLogin,
@@ -24,6 +28,8 @@ export default function LoginRoute() {
         description: "Bem vindo de volta",
         variant: "default",
       });
+
+      navigate(RoutesEnum.HOME);
     },
     onError: (error) => {
       toast({
@@ -60,7 +66,6 @@ export default function LoginRoute() {
   return (
     <AuthCard title="Entrar no Sistema">
       <LoginUserForm onSubmit={mutate} />
-      <button onClick={logout}>sair</button>
     </AuthCard>
   );
 }

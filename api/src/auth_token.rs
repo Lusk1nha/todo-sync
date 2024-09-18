@@ -12,6 +12,7 @@ use serde_json::json;
 use sqlx::{prelude::FromRow, PgPool};
 
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use tracing::debug;
 use std::env;
 
 use crate::AppState;
@@ -51,6 +52,33 @@ pub async fn create_auth_token(user_id: i32, db: &PgPool) -> Result<String, (Sta
     store_token(db, user_id, &token, expires_at_naive)
         .await
         .unwrap();
+
+    Ok(token)
+}
+
+pub async fn get_auth_token(
+    db: &PgPool,
+    token: String,
+) -> Result<Option<AuthToken>, (StatusCode, String)> {
+    let query = r#"
+      SELECT token_id, user_id, token, created_at, expires_at
+      FROM auth_tokens
+      WHERE token = $1
+    "#;
+
+    let token = sqlx::query_as::<_, AuthToken>(query)
+        .bind(token)
+        .fetch_optional(db)
+        .await
+        .map_err(|e| {
+            tracing::error!("Failed to get token: {:?}", e);
+            (
+                axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to get token".to_string(),
+            )
+        })?;
+
+    debug!("Token encontrado: {:?}", token);
 
     Ok(token)
 }
@@ -223,7 +251,7 @@ pub async fn get_jwt_in_db(
         "Verificando token no banco de dados para o usuário {}",
         token_data.sub
     );
-    
+
     let user_id = token_data.sub;
 
     let query = r#"

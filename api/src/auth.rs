@@ -145,16 +145,8 @@ pub async fn logout(State(data): State<Arc<AppState>>, headers: HeaderMap) -> im
     let cookies = headers.get("Cookie");
     debug!("Cookies: {:?}", cookies);
 
-    let token = match headers.get("Authorization") {
-        Some(value) => match value.to_str() {
-            Ok(v) => v.trim_start_matches("Bearer ").to_string(),
-            Err(_) => {
-                return Response::builder()
-                    .status(StatusCode::BAD_REQUEST)
-                    .body(Body::empty())
-                    .unwrap();
-            }
-        },
+    let token = match get_headers_token(&headers) {
+        Some(value) => value.trim_start_matches("Bearer ").to_string(),
         None => {
             return Response::builder()
                 .status(StatusCode::UNAUTHORIZED)
@@ -185,6 +177,16 @@ pub async fn logout(State(data): State<Arc<AppState>>, headers: HeaderMap) -> im
         )
         .body(Body::empty())
         .unwrap()
+}
+
+pub fn get_headers_token(headers: &HeaderMap) -> Option<&str> {
+    let authorization = headers.get("Authorization");
+    let token = match authorization {
+        Some(token) => token.to_str().ok(),
+        None => None,
+    };
+
+    token
 }
 
 // Função para gerar hash da senha

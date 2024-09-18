@@ -23,7 +23,11 @@ export const UsersSettingsSchema = z.object({
       required_error: "Data de nascimento é obrigatória!",
     })
     .min(BIRTHDAY_MIN_DATE, "Data de nascimento inválida!")
-    .max(BIRTHDAY_MAX_DATE, "Data de nascimento inválida!"),
+    .max(BIRTHDAY_MAX_DATE, "Data de nascimento inválida!")
+    .optional()
+    .nullable(),
+
+  profilePicture: z.string().optional().nullable(),
 
   termsAndConditions: z
     .boolean({

@@ -8,18 +8,21 @@ import {
   BIRTHDAY_MAX_DATE,
   BIRTHDAY_MIN_DATE,
 } from "../constants";
+import { IUpdateSettings } from "../repositories/users-profiles-repo";
 
-export function getRequestUserSettings(data: UsersSettingsSchemaType) {
-  const { username, birthday, termsAndConditions } = data;
+export function getRequestUserSettings(
+  data: UsersSettingsSchemaType
+): IUpdateSettings {
+  const { username, birthday } = data;
 
   const newUsername = username.trim();
   const newBirthday = birthday.toISOString();
-  const newTermsAndConditions = termsAndConditions;
 
   return {
     username: newUsername,
-    birthday: newBirthday,
-    termsAndConditions: newTermsAndConditions,
+    date_of_birth: newBirthday,
+
+    profile_picture_url: undefined,
   };
 }
 
