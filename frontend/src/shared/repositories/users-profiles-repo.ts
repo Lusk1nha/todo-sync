@@ -13,7 +13,7 @@ export interface IUserProfileResponse {
 
 export interface IUpdateSettings {
   username: string;
-  date_of_birth: string;
+  date_of_birth?: string;
   profile_picture_url?: string;
 }
 
