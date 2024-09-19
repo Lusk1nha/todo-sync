@@ -1,7 +1,14 @@
 import { ThemeButton } from "@/components/utilities/theme-button/theme-button";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { useIsAuthenticated } from "./../../shared/hooks/use-require-auth-hook";
 
 export default function AuthRoute() {
+  const isAuthenticated = useIsAuthenticated();
+
+  if (isAuthenticated) {
+    return <Navigate to="/home" />;
+  }
+
   return (
     <div id="authentication-page" className="w-full h-full flex flex-col p-6">
       <div className="px-6">

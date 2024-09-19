@@ -13,10 +13,14 @@ import {
 import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
 import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
 import { AuthCard } from "./auth-route/auth-card";
+import { useNavigate } from "react-router-dom";
+import { RoutesEnum } from "@/shared/enums/routes-enum";
 
 export default function RegisterUserRoute() {
   const { signup } = new AuthService();
   const { toast } = useToast();
+
+  const navigate = useNavigate();
 
   const { mutate, reset, isPending, isError, error } = useMutation({
     mutationFn: handleRegister,
@@ -26,6 +30,8 @@ export default function RegisterUserRoute() {
         description: "Bem vindo ao sistema",
         variant: "default",
       });
+
+      navigate(RoutesEnum.LOGIN);
     },
     onError: (error) => {
       toast({

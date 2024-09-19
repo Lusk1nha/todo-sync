@@ -1,19 +1,20 @@
-import { IUserResponse } from "../repositories/users-repo";
+import { IUserProfileResponse } from "../repositories/users-profiles-repo";
 
-export class User {
+export class UserProfile {
   private _user_id: string;
   private _username: string;
   private _birthday: Date;
-  private _email: string;
+  private _profile_picture_url?: string;
 
   private _created_at: Date;
   private _updated_at: Date;
 
-  constructor(data: IUserResponse) {
+  constructor(data: IUserProfileResponse) {
     this._user_id = data.user_id;
     this._username = data.username;
-    this._email = data.email;
-    this._birthday = new Date(data.birthday);
+
+    this._birthday = new Date(data.date_of_birth);
+    this._profile_picture_url = data?.profile_picture_url;
 
     this._created_at = new Date(data.created_at);
     this._updated_at = new Date(data.updated_at);
@@ -27,12 +28,12 @@ export class User {
     return this._username;
   }
 
-  get email(): string {
-    return this._email;
-  }
-
   get birthday(): Date {
     return this._birthday;
+  }
+
+  get profile_picture_url(): string | undefined {
+    return this._profile_picture_url;
   }
 
   get created_at(): Date {

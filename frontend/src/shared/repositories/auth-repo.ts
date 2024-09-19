@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getTokenAuthorization } from "@/shared/helpers/cookies-helper";
 
 export interface IAuthResponse {
   user_id: string;
@@ -12,7 +13,6 @@ export interface IAuthResponse {
 export interface ISignUpRequest {
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
 export interface ILoginUser {
@@ -21,7 +21,7 @@ export interface ILoginUser {
 }
 
 export class AuthRepo {
-  private _API_URL = "http://localhost:8080/api/auth";
+  private _API_URL = "http://localhost:3000/api";
 
   async signup(data: ISignUpRequest): Promise<void> {
     const endpoint = `${this._API_URL}/signup`;
@@ -58,9 +58,10 @@ export class AuthRepo {
   async logout(): Promise<void> {
     const endpoint = `${this._API_URL}/logout`;
 
-    await axios.post<void>(endpoint, {
+    await axios.post<void>(endpoint, undefined, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: getTokenAuthorization(),
       },
       withCredentials: true,
     });

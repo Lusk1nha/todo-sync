@@ -1,22 +1,19 @@
 import { PASSWORD_MIN_LENGTH, REGEX_EMAIL } from "../constants";
+import { ISignUpRequest } from "../repositories/auth-repo";
 import {
   RegisterUserSchema,
   RegisterUserSchemaType,
 } from "../schemas/register-user-schema";
 
-export function getRequestSignUp(
-  data: RegisterUserSchemaType
-): RegisterUserSchemaType {
+export function getRequestSignUp(data: RegisterUserSchemaType): ISignUpRequest {
   const { email, password } = data;
 
   const newEmail = email.trim();
   const newPassword = password.trim();
-  const newConfirmPassword = password.trim();
 
   return {
     email: newEmail,
     password: newPassword,
-    confirmPassword: newConfirmPassword,
   };
 }
 

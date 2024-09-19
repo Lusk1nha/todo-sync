@@ -25,7 +25,7 @@ export function MobileNavbar(props: Readonly<IMobileNavbarProps>) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <LogoMark className="text-xl md:text-2xl" isPulsing />
+            <LogoMark className="text-xl md:text-2xl" />
             <div className="flex flex-col gap-1 pt-4">
               <NavRedirects routes={routes} onClick={() => setIsOpen(false)} />
             </div>
