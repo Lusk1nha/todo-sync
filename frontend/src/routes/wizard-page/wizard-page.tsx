@@ -36,7 +36,7 @@ export function WizardPage() {
 
   return (
     <div className="container h-screen flex max-w-2xl flex-col items-center justify-center gap-4">
-      <div className="absolute left-8 top-8 gap-2">
+      <div className="absolute flex items-center left-8 top-8 gap-2">
         <Button
           className="gap-2"
           size="sm"
@@ -47,7 +47,7 @@ export function WizardPage() {
           Sair da conta
         </Button>
 
-        <ThemeButton />
+        <ThemeButton className="w-8" size="sm" />
       </div>
 
       <div>

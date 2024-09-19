@@ -6,6 +6,7 @@ import {
   USERNAME_MIN_LENGTH,
   USERNAME_REGEX,
 } from "../constants";
+import { FileSchemaValidation } from "../helpers/files-helper";
 
 export const UsersSettingsSchema = z.object({
   username: z
@@ -27,7 +28,7 @@ export const UsersSettingsSchema = z.object({
     .optional()
     .nullable(),
 
-  profilePicture: z.string().optional().nullable(),
+  profilePicture: FileSchemaValidation.nullable(),
 
   termsAndConditions: z
     .boolean({

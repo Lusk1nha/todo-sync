@@ -18,7 +18,7 @@ import { DatePicker } from "../../inputs/date-picker";
 import { Button } from "@/components/ui/button";
 import { TermsAndConditionsField } from "@/components/inputs/terms-and-conditions";
 
-import { DragAndDrop } from "@/components/inputs/drag-and-drop";
+import { UploadAvatar } from "@/components/inputs/upload-avatar/upload-avatar";
 
 interface IUsersSettingsFormProps {
   onSubmit: (data: UsersSettingsSchemaType) => void;
@@ -52,7 +52,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
             name="username"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Nome de usuário</FormLabel>
+                <FormLabel required>Nome de usuário</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Insira o nome de usuário"
@@ -94,16 +94,26 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
           <FormField
             control={control}
             name="profilePicture"
-            render={() => (
+            render={({
+              field: { name, onBlur, value, onChange, disabled },
+              fieldState: { invalid },
+            }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel>Imagem de perfil</FormLabel>
                 <FormControl>
-                  <DragAndDrop
-                    strings={{
+                  <UploadAvatar
+                    name={name}
+                    onChange={onChange}
+                    value={value as any}
+                    onBlur={onBlur}
+                    dragAndDropStrings={{
                       dragAndDrop: "Arraste e solte ou clique para procurar",
                       dragAndDropDescription:
                         "A imagem deve ter pelo menos 40x40px e menor que 5MB",
+                      acceptDescription: "Apenas imagens PNG e JPEG",
                     }}
+                    error={invalid}
+                    disabled={disabled}
                   />
                 </FormControl>
                 <FormMessage />
