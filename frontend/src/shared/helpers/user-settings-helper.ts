@@ -16,7 +16,7 @@ export function getRequestUserSettings(
   const { username, birthday } = data;
 
   const newUsername = username.trim();
-  const newBirthday = birthday.toISOString();
+  const newBirthday = birthday?.toISOString();
 
   return {
     username: newUsername,
@@ -30,7 +30,7 @@ export function validateUserSettings(data: UsersSettingsSchemaType) {
   UsersSettingsSchema.parse(data);
 
   validateUsername(data.username);
-  validateBirthday(data.birthday);
+  validateBirthday(data?.birthday);
   validateTermsAndConditions(data.termsAndConditions);
 }
 
@@ -44,9 +44,9 @@ function validateUsername(username: string): void {
   }
 }
 
-function validateBirthday(birthday: Date): void {
+function validateBirthday(birthday?: Date | null): void {
   if (!birthday) {
-    throw new Error("Data de nascimento é obrigatória");
+    return;
   }
 
   if (birthday < BIRTHDAY_MIN_DATE) {

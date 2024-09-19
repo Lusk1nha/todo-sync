@@ -12,17 +12,18 @@ import { motion } from "framer-motion";
 
 interface IThemeButtonProps {
   size?: "sm" | "lg" | "default" | "icon" | null | undefined;
+  className?: string;
 }
 
 export function ThemeButton(props: Readonly<IThemeButtonProps>) {
-  const { size = "icon" } = props;
+  const { size = "icon", className } = props;
 
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size={size} className="group">
+        <Button variant="outline" size={size} className={className}>
           <motion.div
             className="flex items-center justify-center"
             initial={{ rotate: 0 }}
