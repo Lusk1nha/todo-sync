@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface TermsAndConditionsStrings {
   acceptTerms?: string;
@@ -40,26 +41,34 @@ export function TermsAndConditionsField(
   }
 
   return (
-    <div className="items-top flex space-x-2">
-      <Checkbox
-        name={name}
-        checked={checked}
-        onCheckedChange={handleCheck}
-        onBlur={onBlur}
-        disabled={disabled}
-      />
+    <AnimatePresence>
+      <motion.div
+        animate={{ opacity: [0, 1] }}
+        transition={{ delay: 0.15 }}
+        className="items-top flex space-x-2"
+      >
+        <Checkbox
+          className="hover:bg-accent"
+          name={name}
+          checked={checked}
+          onCheckedChange={handleCheck}
+          onBlur={onBlur}
+          disabled={disabled}
+        />
 
-      <div className="grid gap-1.5 leading-none">
-        <label
-          htmlFor="terms1"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          {strings.acceptTerms}
-        </label>
-        <p className="text-xs text-muted-foreground">
-          {strings.termsAndConditions}
-        </p>
-      </div>
-    </div>
+        <div className="grid gap-1.5 leading-none">
+          <label
+            htmlFor="terms1"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {strings.acceptTerms}
+          </label>
+
+          <p className="text-xs text-muted-foreground">
+            {strings.termsAndConditions}
+          </p>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

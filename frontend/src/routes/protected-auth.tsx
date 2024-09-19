@@ -1,4 +1,5 @@
 import { RoutesEnum } from "@/shared/enums/routes-enum";
+
 import { useIsAuthenticated } from "@/shared/hooks/use-require-auth-hook";
 import { Navigate, Outlet } from "react-router-dom";
 

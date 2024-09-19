@@ -6,6 +6,7 @@ import {
   USERNAME_MIN_LENGTH,
   USERNAME_REGEX,
 } from "../constants";
+import { FileSchemaValidation } from "../helpers/files-helper";
 
 export const UsersSettingsSchema = z.object({
   username: z
@@ -23,7 +24,11 @@ export const UsersSettingsSchema = z.object({
       required_error: "Data de nascimento é obrigatória!",
     })
     .min(BIRTHDAY_MIN_DATE, "Data de nascimento inválida!")
-    .max(BIRTHDAY_MAX_DATE, "Data de nascimento inválida!"),
+    .max(BIRTHDAY_MAX_DATE, "Data de nascimento inválida!")
+    .optional()
+    .nullable(),
+
+  profilePicture: FileSchemaValidation.nullable(),
 
   termsAndConditions: z
     .boolean({

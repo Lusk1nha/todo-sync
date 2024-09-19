@@ -30,13 +30,17 @@ import { WizardPage } from "./routes/wizard-page/wizard-page";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={RoutesEnum.ROOT} element={<App />}>
+
+      {/* The following routes are protected */}
       <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
-        <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
         <Route path={RoutesEnum.ROOT} element={<LoggedRoute />}>
           <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
         </Route>
-      </Route>
 
+        <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
+      </Route>
+      
+      {/* The following routes are not protected */}
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
         <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />
         <Route path={RoutesEnum.REGISTER} element={<RegisterUserRoute />} />

@@ -8,18 +8,21 @@ import {
   BIRTHDAY_MAX_DATE,
   BIRTHDAY_MIN_DATE,
 } from "../constants";
+import { IUpdateSettings } from "../repositories/users-profiles-repo";
 
-export function getRequestUserSettings(data: UsersSettingsSchemaType) {
-  const { username, birthday, termsAndConditions } = data;
+export function getRequestUserSettings(
+  data: UsersSettingsSchemaType
+): IUpdateSettings {
+  const { username, birthday } = data;
 
   const newUsername = username.trim();
-  const newBirthday = birthday.toISOString();
-  const newTermsAndConditions = termsAndConditions;
+  const newBirthday = birthday?.toISOString();
 
   return {
     username: newUsername,
-    birthday: newBirthday,
-    termsAndConditions: newTermsAndConditions,
+    date_of_birth: newBirthday,
+
+    profile_picture_url: undefined,
   };
 }
 
@@ -27,7 +30,7 @@ export function validateUserSettings(data: UsersSettingsSchemaType) {
   UsersSettingsSchema.parse(data);
 
   validateUsername(data.username);
-  validateBirthday(data.birthday);
+  validateBirthday(data?.birthday);
   validateTermsAndConditions(data.termsAndConditions);
 }
 
@@ -41,9 +44,9 @@ function validateUsername(username: string): void {
   }
 }
 
-function validateBirthday(birthday: Date): void {
+function validateBirthday(birthday?: Date | null): void {
   if (!birthday) {
-    throw new Error("Data de nascimento é obrigatória");
+    return;
   }
 
   if (birthday < BIRTHDAY_MIN_DATE) {

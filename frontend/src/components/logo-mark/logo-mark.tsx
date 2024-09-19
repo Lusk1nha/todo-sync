@@ -8,7 +8,7 @@ interface ILogoMarkProps {
 }
 
 export function LogoMark(props: Readonly<ILogoMarkProps>) {
-  const { className, isPulsing } = props;
+  const { className, isPulsing = false } = props;
 
   if (isPulsing) {
     return (

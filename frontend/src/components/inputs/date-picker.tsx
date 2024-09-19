@@ -17,6 +17,7 @@ import {
 
 interface IDatePickerProps {
   value: Date | undefined;
+
   onChange: (date: Date | undefined) => void;
   onBlur?: () => void;
   placeholder?: string;
@@ -68,7 +69,7 @@ export function DatePicker(props: Readonly<IDatePickerProps>) {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent align="end" className="w-auto p-0">
         <Calendar
           mode="single"
           selected={date}
