@@ -1,6 +1,6 @@
-import { ThemeButton } from "@/components/utilities/theme-button/theme-button";
+import { ThemeButton } from "@/components/buttons/theme-button";
+import { useIsAuthenticated } from "@/shared/hooks/use-require-auth-hook";
 import { Navigate, Outlet } from "react-router-dom";
-import { useIsAuthenticated } from "./../../shared/hooks/use-require-auth-hook";
 
 export default function AuthRoute() {
   const isAuthenticated = useIsAuthenticated();

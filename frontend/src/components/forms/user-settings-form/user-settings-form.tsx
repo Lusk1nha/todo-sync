@@ -41,8 +41,6 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
 
   const { isSubmitting, isValid, errors } = formState;
 
-  console.log({ isValid, errors });
-
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">

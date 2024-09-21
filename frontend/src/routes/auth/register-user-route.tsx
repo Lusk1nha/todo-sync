@@ -12,7 +12,7 @@ import {
 
 import { ErrorFormReturn } from "@/components/forms/utilities/error-form-return";
 import { LoadingFormReturn } from "@/components/forms/utilities/loading-form-return";
-import { AuthCard } from "./auth-route/auth-card";
+import { AuthCard } from "../../components/auth-card";
 import { useNavigate } from "react-router-dom";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
 

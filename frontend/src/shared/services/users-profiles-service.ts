@@ -25,7 +25,11 @@ export class UsersProfilesService implements UsersProfilesModel {
     return new UserProfile(data);
   }
 
-  async update(data: IUpdateSettings): Promise<void> {
-    await this._repository.updateUserSettings(data);
+  async create(data: IUpdateSettings): Promise<void> {
+    await this._repository.createUserProfile(data);
+  }
+
+  async update(id: string, data: IUpdateSettings): Promise<void> {
+    await this._repository.updateUserSettings(id, data);
   }
 }

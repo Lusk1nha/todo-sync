@@ -20,7 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export function WizardCardForm() {
-  const { update } = new UsersProfilesService();
+  const { create } = new UsersProfilesService();
   const { toast } = useToast();
 
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export function WizardCardForm() {
     validateUserSettings(data);
 
     const settings = getRequestUserSettings(data);
-    await update(settings);
+    await create(settings);
   }
 
   if (isError && error) {

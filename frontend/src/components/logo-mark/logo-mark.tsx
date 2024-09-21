@@ -19,7 +19,7 @@ export function LogoMark(props: Readonly<ILogoMarkProps>) {
         )}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.9 }}
-        animate={{ scale: [1.1, 1] }}
+        animate={{ opacity: [0, 1] }}
       >
         <ListTodo className="w-6 h-6 md:w-8 md:h-8" />
         <h1 className="font-bold">

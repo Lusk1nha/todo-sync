@@ -1,4 +1,4 @@
-import { ThemeButton } from "../utilities/theme-button/theme-button";
+import { ThemeButton } from "../buttons/theme-button";
 
 export function NavButtons() {
   return (
