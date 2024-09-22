@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { TermsAndConditionsField } from "@/components/inputs/terms-and-conditions";
 
 import { UploadAvatar } from "@/components/inputs/upload-avatar/upload-avatar";
+import { BIRTHDAY_MAX_DATE, BIRTHDAY_MIN_DATE } from "@/shared/constants";
 
 interface IUsersSettingsFormProps {
   onSubmit: (data: UsersSettingsSchemaType) => void;
@@ -29,6 +30,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
 
   const form = useForm<UsersSettingsSchemaType>({
     resolver: zodResolver(UsersSettingsSchema),
+    mode: "onChange",
     defaultValues: {
       username: "",
       birthday: null,
@@ -39,7 +41,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
 
   const { control, handleSubmit, formState } = form;
 
-  const { isSubmitting, isValid, errors } = formState;
+  const { isSubmitting, isValid } = formState;
 
   return (
     <Form {...form}>
@@ -61,7 +63,6 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                     disabled={field.disabled}
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -80,8 +81,8 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                     onBlur={field.onBlur}
                     disabled={field.disabled}
                     placeholder="Seleciona a data de nascimento"
-                    min={new Date(1900, 0, 1)}
-                    max={new Date()}
+                    min={BIRTHDAY_MIN_DATE}
+                    max={BIRTHDAY_MAX_DATE}
                   />
                 </FormControl>
                 <FormMessage />

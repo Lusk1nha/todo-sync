@@ -3,7 +3,11 @@ import { useCurrentUser } from "@/shared/hooks/use-current-user-hook";
 import { Navigate, Outlet } from "react-router-dom";
 
 export function UserProfileMiddlewareRoute() {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, isFetching } = useCurrentUser();
+
+  if (isFetching) {
+    return null;
+  }
 
   if (!currentUser) {
     return <Navigate to={RoutesEnum.WIZARD} />;

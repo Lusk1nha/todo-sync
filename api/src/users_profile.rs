@@ -5,7 +5,9 @@ use axum::{
     extract::State,
     http::{HeaderMap, Response, StatusCode},
     response::IntoResponse,
+    Json,
 };
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
 
@@ -22,16 +24,16 @@ pub struct UserProfile {
     pub created_at: chrono::NaiveDateTime,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NewUserProfile {
-    pub user_id: i32,
     pub username: String,
-    pub date_of_birth: Option<chrono::NaiveDate>,
+    pub date_of_birth: Option<DateTime<Utc>>,
     pub profile_picture_url: Option<String>,
 }
 
 pub struct UpdateUserProfile {
     pub username: Option<String>,
-    pub date_of_birth: Option<chrono::NaiveDate>,
+    pub date_of_birth: Option<DateTime<Utc>>,
     pub profile_picture_url: Option<String>,
 }
 
@@ -40,7 +42,7 @@ pub async fn get_user_profile_by_id(
     user_id: &i32,
 ) -> Result<Option<UserProfile>, sqlx::Error> {
     let query = r#"
-        SELECT user_id, username, date_of_birth, profile_picture_url, created_at
+        SELECT user_id, username, date_of_birth, profile_picture_url, created_at, updated_at
         FROM user_profiles
         WHERE user_id = $1
     "#;
@@ -99,4 +101,61 @@ pub async fn get_current_user(
             .body(Body::empty())
             .unwrap(),
     }
+}
+
+pub async fn create_user_profile(
+    pool: &PgPool,
+    user_id: i32,
+    data: &NewUserProfile,
+) -> Result<UserProfile, sqlx::Error> {
+    let query = r#"
+      INSERT INTO user_profiles (user_id, username, date_of_birth, profile_picture_url)
+      VALUES ($1, $2, $3, $4)
+      RETURNING user_id, username, date_of_birth, profile_picture_url, created_at
+    "#;
+
+    let new_profile = NewUserProfile {
+        username: data.username.clone(),
+        date_of_birth: data.date_of_birth,
+        profile_picture_url: data.profile_picture_url.clone(),
+    };
+
+    tracing::debug!("Creating user profile: {:?}", new_profile);
+
+    sqlx::query_as::<_, UserProfile>(query)
+        .bind(user_id)
+        .bind(&new_profile.username)
+        .bind(&new_profile.date_of_birth)
+        .bind(&new_profile.profile_picture_url)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn create_user_profile_route(
+    State(data): State<Arc<AppState>>,
+    headers: HeaderMap,
+    Json(payload): Json<NewUserProfile>,
+) -> Result<impl IntoResponse, (StatusCode, &'static str)> {
+    tracing::info!("Creating user profile: {:?}", payload);
+
+    let token = get_headers_token(&headers)
+        .ok_or((StatusCode::UNAUTHORIZED, "Unauthorized"))?
+        .trim_start_matches("Bearer ")
+        .to_string();
+
+    let user_id = get_auth_token(&data.db, token)
+        .await
+        .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Error checking token"))?
+        .ok_or((StatusCode::UNAUTHORIZED, "Invalid token"))?
+        .user_id;
+
+    tracing::debug!("User ID: {}", user_id);
+
+    create_user_profile(&data.db, user_id, &payload)
+        .await
+        .map_err(|e| {
+            let err_msg: &'static str = Box::leak(e.to_string().into_boxed_str());
+            (StatusCode::INTERNAL_SERVER_ERROR, err_msg)
+        })
+        .map(|profile| (StatusCode::CREATED, Json(profile)).into_response())
 }

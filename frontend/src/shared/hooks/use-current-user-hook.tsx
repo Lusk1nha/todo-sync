@@ -2,6 +2,9 @@ import { UsersProfilesService } from "../services/users-profiles-service";
 import { UserProfile } from "../factories/user-profile-factory";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
+import { profileAtom } from "../atoms";
+import { useAtom } from "jotai";
 
 interface IUseCurrentUser {
   currentUser: UserProfile | null | undefined;
@@ -12,16 +15,26 @@ interface IUseCurrentUser {
 export const useCurrentUser = (): IUseCurrentUser => {
   const { getCurrentUser } = new UsersProfilesService();
   const { toast } = useToast();
+  const [_, setProfile] = useAtom(profileAtom);
 
   const {
     data: currentUser,
     refetch,
     isFetching,
+    isLoading,
   } = useQuery({
     queryKey: ["currentUser"],
     queryFn: fetchUser,
     initialData: null,
+    refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log("currentUser", currentUser);
+      setProfile(currentUser);
+    }
+  }, [currentUser]);
 
   async function fetchUser() {
     try {
@@ -40,5 +53,5 @@ export const useCurrentUser = (): IUseCurrentUser => {
     }
   }
 
-  return { currentUser, refetch, isFetching };
+  return { currentUser, refetch, isFetching: isLoading || isFetching };
 };

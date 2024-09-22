@@ -12,6 +12,7 @@ export class UsersProfilesService implements UsersProfilesModel {
     this._repository = new UsersProfilesRepo();
 
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.create = this.create.bind(this);
     this.update = this.update.bind(this);
   }
 
