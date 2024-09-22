@@ -31,7 +31,6 @@ export const useCurrentUser = (): IUseCurrentUser => {
 
   useEffect(() => {
     if (currentUser) {
-      console.log("currentUser", currentUser);
       setProfile(currentUser);
     }
   }, [currentUser]);

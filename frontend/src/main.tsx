@@ -25,7 +25,7 @@ import { queryClient } from "./shared/helpers/react-query-helper";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
 import { UserProfileMiddlewareRoute } from "./routes/middlewares/user-profile-middleware-route";
-import { WizardPage } from "./routes/first-wizard-route";
+import { WizardPage } from "./routes/wizard-route";
 import { MainContentRoute } from "./routes/main-content-route";
 
 const router = createBrowserRouter(

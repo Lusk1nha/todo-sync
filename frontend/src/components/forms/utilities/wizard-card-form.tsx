@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
+import { UserProfile } from "@/shared/factories/user-profile-factory";
 import {
   getRequestUserSettings,
   validateUserSettings,
@@ -19,8 +20,14 @@ import { UsersProfilesService } from "@/shared/services/users-profiles-service";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-export function WizardCardForm() {
-  const { create } = new UsersProfilesService();
+interface IWizardCardFormProps {
+  defaultValues?: UserProfile | null;
+}
+
+export function WizardCardForm(props: Readonly<IWizardCardFormProps>) {
+  const { defaultValues } = props;
+
+  const { create, update } = new UsersProfilesService();
   const { toast } = useToast();
 
   const navigate = useNavigate();
@@ -49,7 +56,12 @@ export function WizardCardForm() {
     validateUserSettings(data);
 
     const settings = getRequestUserSettings(data);
-    await create(settings);
+
+    if (!defaultValues) {
+      await create(settings);
+    } else {
+      await update(defaultValues.user_id, settings);
+    }
   }
 
   if (isError && error) {
@@ -87,7 +99,7 @@ export function WizardCardForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-y-4">
-        <UsersSettingsForm onSubmit={mutate} />
+        <UsersSettingsForm onSubmit={mutate} defaultValues={defaultValues} />
       </CardContent>
     </Card>
   );

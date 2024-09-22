@@ -23,6 +23,8 @@ interface ILogoutButtonProps {
   onClick?: () => void;
   className?: string;
   strings?: LogoutButtonStrings;
+
+  useResponsiveText?: boolean;
 }
 
 export function LogoutButton(props: Readonly<ILogoutButtonProps>) {
@@ -42,11 +44,13 @@ export function LogoutButton(props: Readonly<ILogoutButtonProps>) {
         description: "Ocorreu um erro ao desconectar",
       },
     },
+    useResponsiveText = false,
   } = props;
 
   const { logout } = new AuthService();
   const { toast } = useToast();
-  const isMobile = useMediaQuery("(min-width: 640px)");
+
+  const isMobile = useMediaQuery("(max-width: 640px)") && useResponsiveText;
 
   async function handleLogout() {
     try {
@@ -81,7 +85,7 @@ export function LogoutButton(props: Readonly<ILogoutButtonProps>) {
       onClick={handleLogout}
     >
       <LogOut className="w-4 h-4" />
-      {isMobile && strings.text}
+      {!isMobile && strings.text}
     </Button>
   );
 }

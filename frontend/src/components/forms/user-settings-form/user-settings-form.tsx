@@ -20,24 +20,35 @@ import { TermsAndConditionsField } from "@/components/inputs/terms-and-condition
 
 import { UploadAvatar } from "@/components/inputs/upload-avatar/upload-avatar";
 import { BIRTHDAY_MAX_DATE, BIRTHDAY_MIN_DATE } from "@/shared/constants";
+import { UserProfile } from "@/shared/factories/user-profile-factory";
+import { Link } from "react-router-dom";
+import { RoutesEnum } from "@/shared/enums/routes-enum";
+import { Home } from "lucide-react";
 
 interface IUsersSettingsFormProps {
   onSubmit: (data: UsersSettingsSchemaType) => void;
+  defaultValues?: UserProfile | null;
 }
 
 export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
-  const { onSubmit } = props;
+  const { onSubmit, defaultValues } = props;
 
   const form = useForm<UsersSettingsSchemaType>({
     resolver: zodResolver(UsersSettingsSchema),
     mode: "onChange",
-    defaultValues: {
-      username: "",
-      birthday: null,
+    defaultValues: getDefaultUserSettings(defaultValues),
+  });
+
+  function getDefaultUserSettings(
+    user?: UserProfile | null
+  ): UsersSettingsSchemaType {
+    return {
+      username: user?.username ?? "",
+      birthday: user?.birthday ?? null,
       profilePicture: null,
       termsAndConditions: false,
-    },
-  });
+    };
+  }
 
   const { control, handleSubmit, formState } = form;
 
@@ -141,13 +152,22 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
           />
         </FieldGroup>
 
-        <Button
-          className="w-full"
-          type="submit"
-          disabled={isSubmitting || !isValid}
-        >
-          Estou pronto para começar!
-        </Button>
+        <div className="flex justify-between items-center gap-4">
+          {defaultValues && (
+            <Link to={RoutesEnum.HOME}>
+              <Button className="gap-2" variant="link" type="button">
+                <Home className="w-4 h-4" />
+                Voltar
+              </Button>
+            </Link>
+          )}
+
+          <Button type="submit" disabled={isSubmitting || !isValid}>
+            {defaultValues
+              ? "Atualizar configurações"
+              : "Estou pronto para começar!"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

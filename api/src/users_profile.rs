@@ -111,7 +111,7 @@ pub async fn create_user_profile(
     let query = r#"
       INSERT INTO user_profiles (user_id, username, date_of_birth, profile_picture_url)
       VALUES ($1, $2, $3, $4)
-      RETURNING user_id, username, date_of_birth, profile_picture_url, created_at
+      RETURNING user_id, username, date_of_birth, profile_picture_url, created_at, updated_at
     "#;
 
     let new_profile = NewUserProfile {
