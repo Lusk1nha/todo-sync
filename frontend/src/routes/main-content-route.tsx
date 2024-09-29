@@ -2,11 +2,12 @@ import { Navbar } from "@/components/navbar/navbar";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-export function LoggedRoute() {
-  const pathname = useLocation().pathname;
-  const isRoot = pathname === RoutesEnum.ROOT;
+export function MainContentRoute() {
+  const { pathname } = useLocation();
 
-  if (isRoot) return <Navigate to={RoutesEnum.HOME} replace />;
+  if (pathname === RoutesEnum.ROOT) {
+    return <Navigate to={RoutesEnum.HOME} />;
+  }
 
   return (
     <div className="w-full h-full">

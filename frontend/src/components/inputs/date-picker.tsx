@@ -40,6 +40,7 @@ export function DatePicker(props: Readonly<IDatePickerProps>) {
   } = props;
 
   const [date, setDate] = React.useState<Date | undefined>(value);
+  const [isActive, setIsActive] = React.useState(false);
 
   function handleSelect(date: Date | undefined): void {
     if (disabled) return;
@@ -49,13 +50,15 @@ export function DatePicker(props: Readonly<IDatePickerProps>) {
   }
 
   return (
-    <Popover>
+    <Popover open={isActive} onOpenChange={setIsActive}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "pl-3 text-left font-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-            !date && "text-muted-foreground"
+            "pl-3 text-left font-normal focus:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+            !date && "text-muted-foreground",
+            isActive && "border-primary",
+            disabled && "cursor-not-allowed"
           )}
           onBlur={onBlur}
           disabled={disabled}
@@ -65,7 +68,13 @@ export function DatePicker(props: Readonly<IDatePickerProps>) {
           ) : (
             <span>{placeholder}</span>
           )}
-          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+          <CalendarIcon
+            className={cn(
+              "ml-auto h-4 w-4 opacity-50",
+              isActive && "text-primary",
+              disabled && "text-muted-foreground"
+            )}
+          />
         </Button>
       </PopoverTrigger>
 

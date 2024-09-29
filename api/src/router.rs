@@ -17,7 +17,7 @@ use tower_http::cors::CorsLayer;
 use crate::{
     auth::{login, logout, signup},
     auth_token::auth_middleware,
-    users_profile::get_current_user,
+    users_profile::{create_user_profile_route, get_current_user},
     AppState,
 };
 
@@ -29,6 +29,7 @@ const LOGOUT_PATH: &str = "/logout";
 
 const USERS_GROUP_PATH: &str = "/users";
 const USERS_CURRENT_PATH: &str = "/current-user";
+const USERS_CREATE_PATH: &str = "/settings";
 
 const HEALTH_CHECK_PATH: &str = "/health-check";
 
@@ -69,6 +70,7 @@ fn auth_routes(app_state: Arc<AppState>) -> Router {
 fn users_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
     Router::new()
         .route(USERS_CURRENT_PATH, get(get_current_user))
+        .route(USERS_CREATE_PATH, post(create_user_profile_route))
         .with_state(app_state)
 }
 

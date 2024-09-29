@@ -45,8 +45,6 @@ export function DragAndDrop(props: Readonly<IDragAndDropProps>) {
   const [_, setIsDraggingInside] = useState(false);
 
   const onDrop = useCallback((files: File[]) => {
-    console.log(files);
-
     if (files.length > maxFiles) {
       onChange([]);
       return;

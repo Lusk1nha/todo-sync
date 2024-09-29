@@ -7,7 +7,7 @@ import { validateForgotUser } from "@/shared/helpers/forgot-user-helper";
 import { ForgotUserSchemaType } from "@/shared/schemas/forgot-user-schema";
 import { AuthService } from "@/shared/services/auth-service";
 import { useMutation } from "@tanstack/react-query";
-import { AuthCard } from "./auth-route/auth-card";
+import { AuthCard } from "../../components/auth-card";
 
 export default function ForgotUserRoute() {
   const { forgot } = new AuthService();

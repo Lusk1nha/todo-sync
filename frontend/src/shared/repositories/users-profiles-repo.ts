@@ -33,8 +33,23 @@ export class UsersProfilesRepo {
     return response.data;
   }
 
-  async updateUserSettings(data: IUpdateSettings): Promise<void> {
+  async createUserProfile(data: IUpdateSettings): Promise<void> {
     const endpoint = `${this._API_URL}/settings`;
+
+    await axios.post<string>(endpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getTokenAuthorization(),
+      },
+      withCredentials: true,
+    });
+  }
+
+  async updateUserSettings(
+    userId: string,
+    data: IUpdateSettings
+  ): Promise<void> {
+    const endpoint = `${this._API_URL}/${userId}/settings`;
 
     await axios.patch<string>(endpoint, data, {
       headers: {

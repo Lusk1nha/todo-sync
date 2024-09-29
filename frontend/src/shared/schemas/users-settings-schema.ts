@@ -13,11 +13,11 @@ export const UsersSettingsSchema = z.object({
     .string({
       required_error: "Nome de usuário é obrigatório!",
     })
+    .min(USERNAME_MIN_LENGTH, "Nome de usuário muito curto!")
+    .max(USERNAME_MAX_LENGTH, "Nome de usuário muito longo!")
     .regex(USERNAME_REGEX, {
       message: "Nome de usuário inválido! Use apenas letras, números, - e _",
-    })
-    .min(USERNAME_MIN_LENGTH, "Nome de usuário muito curto!")
-    .max(USERNAME_MAX_LENGTH, "Nome de usuário muito longo!"),
+    }),
 
   birthday: z
     .date({

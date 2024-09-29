@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { DevText } from "@/components/utilities/dev-text/dev-text";
+import { DevText } from "@/components/utilities/dev-text";
 
 interface IAuthCardProps {
   title?: string;
