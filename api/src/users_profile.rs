@@ -31,6 +31,7 @@ pub struct NewUserProfile {
     pub profile_picture_url: Option<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateUserProfile {
     pub username: Option<String>,
     pub date_of_birth: Option<DateTime<Utc>>,
@@ -103,7 +104,7 @@ pub async fn get_current_user(
     }
 }
 
-pub async fn create_user_profile(
+async fn create_user_profile(
     pool: &PgPool,
     user_id: i32,
     data: &NewUserProfile,
@@ -158,4 +159,64 @@ pub async fn create_user_profile_route(
             (StatusCode::INTERNAL_SERVER_ERROR, err_msg)
         })
         .map(|profile| (StatusCode::CREATED, Json(profile)).into_response())
+}
+
+async fn update_user_profile(
+    pool: &PgPool,
+    user_id: i32,
+    data: &UpdateUserProfile,
+) -> Result<UserProfile, sqlx::Error> {
+    let query = r#"
+         UPDATE user_profiles
+         SET username = COALESCE($2, username),
+             date_of_birth = COALESCE($3, date_of_birth),
+             profile_picture_url = COALESCE($4, profile_picture_url)
+         WHERE user_id = $1
+         RETURNING user_id, username, date_of_birth, profile_picture_url, created_at, updated_at
+     "#;
+
+    let update_profile = UpdateUserProfile {
+        username: data.username.clone(),
+        date_of_birth: data.date_of_birth,
+        profile_picture_url: data.profile_picture_url.clone(),
+    };
+
+    tracing::debug!("Updating user profile: {:?}", update_profile);
+
+    sqlx::query_as::<_, UserProfile>(query)
+        .bind(user_id)
+        .bind(&update_profile.username)
+        .bind(&update_profile.date_of_birth)
+        .bind(&update_profile.profile_picture_url)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn update_user_profile_route(
+    State(data): State<Arc<AppState>>,
+    headers: HeaderMap,
+    Json(payload): Json<UpdateUserProfile>,
+) -> Result<impl IntoResponse, (StatusCode, &'static str)> {
+    tracing::info!("Updating user profile: {:?}", payload);
+
+    let token = get_headers_token(&headers)
+        .ok_or((StatusCode::UNAUTHORIZED, "Unauthorized"))?
+        .trim_start_matches("Bearer ")
+        .to_string();
+
+    let user_id = get_auth_token(&data.db, token)
+        .await
+        .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Error checking token"))?
+        .ok_or((StatusCode::UNAUTHORIZED, "Invalid token"))?
+        .user_id;
+
+    tracing::debug!("User ID: {}", user_id);
+
+    update_user_profile(&data.db, user_id, &payload)
+        .await
+        .map_err(|e| {
+            let err_msg: &'static str = Box::leak(e.to_string().into_boxed_str());
+            (StatusCode::INTERNAL_SERVER_ERROR, err_msg)
+        })
+        .map(|profile| (StatusCode::OK, Json(profile)).into_response())
 }

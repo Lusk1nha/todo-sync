@@ -45,11 +45,8 @@ export class UsersProfilesRepo {
     });
   }
 
-  async updateUserSettings(
-    userId: string,
-    data: IUpdateSettings
-  ): Promise<void> {
-    const endpoint = `${this._API_URL}/${userId}/settings`;
+  async updateUserSettings(data: IUpdateSettings): Promise<void> {
+    const endpoint = `${this._API_URL}/current-user`;
 
     await axios.patch<string>(endpoint, data, {
       headers: {

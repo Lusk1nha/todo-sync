@@ -27,19 +27,24 @@ import { Toaster } from "./components/ui/toaster";
 import { UserProfileMiddlewareRoute } from "./routes/middlewares/user-profile-middleware-route";
 import { WizardPage } from "./routes/wizard-route";
 import { MainContentRoute } from "./routes/main-content-route";
+import { NotFoundRoute } from "./routes/not-found-route";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path={RoutesEnum.ROOT} element={<App />}>
-      <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
-        <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}>
+    <Route
+      path={RoutesEnum.ROOT}
+      element={<App />}
+      errorElement={<NotFoundRoute />}
+    >
+      {/* <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}> */}
+        {/* <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}> */}
           <Route path={RoutesEnum.ROOT} element={<MainContentRoute />}>
             <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
-      </Route>
+      {/* </Route> */}
 
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
         <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />

@@ -30,7 +30,7 @@ export class UsersProfilesService implements UsersProfilesModel {
     await this._repository.createUserProfile(data);
   }
 
-  async update(id: string, data: IUpdateSettings): Promise<void> {
-    await this._repository.updateUserSettings(id, data);
+  async update(data: IUpdateSettings): Promise<void> {
+    await this._repository.updateUserSettings(data);
   }
 }

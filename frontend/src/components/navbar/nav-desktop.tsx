@@ -1,24 +1,24 @@
-import { NavRedirects, NavRouteLink } from "./nav-redirects";
 import { LogoMark } from "../logo-mark/logo-mark";
-import { NavButtons } from "./nav-buttons";
 
-interface IDesktopNavbarProps {
-  routes: NavRouteLink[];
-}
+import { UserFolderRender } from "../user-folder-render/user-folder-render";
+import { ThemeSwitch } from "../switchs/theme-switch";
 
-export function DesktopNavbar(props: Readonly<IDesktopNavbarProps>) {
-  const { routes } = props;
-
+export function DesktopNavbar() {
   return (
-    <div className="hidden border-separate border-b bg-background md:block">
-      <nav className="container flex items-center justify-between px-8">
-        <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
-          <LogoMark className="text-xl md:text-2xl" />
-          <NavRedirects routes={routes} />
+    <aside className="hidden h-full bg-background border-separate border-border border-r md:block">
+      <nav className="min-w-[300px] w-[300px] h-full flex flex-col">
+        <div className="w-full h-24 flex py-6 px-9">
+          <LogoMark className="text-lg md:text-xl" />
         </div>
 
-        <NavButtons />
+        <div className="flex flex-col pt-2 mb-auto">
+          <UserFolderRender />
+        </div>
+
+        <div className="py-4 px-9">
+          <ThemeSwitch />
+        </div>
       </nav>
-    </div>
+    </aside>
   );
 }

@@ -9,7 +9,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { RoutesEnum } from "@/shared/enums/routes-enum";
+
 import { UserProfile } from "@/shared/factories/user-profile-factory";
 import {
   getRequestUserSettings,
@@ -18,30 +18,29 @@ import {
 import { UsersSettingsSchemaType } from "@/shared/schemas/users-settings-schema";
 import { UsersProfilesService } from "@/shared/services/users-profiles-service";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 interface IWizardCardFormProps {
   defaultValues?: UserProfile | null;
+
+  onSubmit?: (data: UsersSettingsSchemaType) => void;
 }
 
 export function WizardCardForm(props: Readonly<IWizardCardFormProps>) {
-  const { defaultValues } = props;
+  const { defaultValues, onSubmit } = props;
 
   const { create, update } = new UsersProfilesService();
   const { toast } = useToast();
 
-  const navigate = useNavigate();
-
   const { mutate, reset, isPending, isError, error } = useMutation({
     mutationFn: handleSave,
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: "Configurações salvas",
         description: "As configurações foram salvas com sucesso",
         variant: "default",
       });
 
-      navigate(RoutesEnum.HOME);
+      if (onSubmit) onSubmit(data);
     },
     onError: (error) => {
       toast({
@@ -52,7 +51,9 @@ export function WizardCardForm(props: Readonly<IWizardCardFormProps>) {
     },
   });
 
-  async function handleSave(data: UsersSettingsSchemaType): Promise<void> {
+  async function handleSave(
+    data: UsersSettingsSchemaType
+  ): Promise<UsersSettingsSchemaType> {
     validateUserSettings(data);
 
     const settings = getRequestUserSettings(data);
@@ -60,8 +61,10 @@ export function WizardCardForm(props: Readonly<IWizardCardFormProps>) {
     if (!defaultValues) {
       await create(settings);
     } else {
-      await update(defaultValues.user_id, settings);
+      await update(settings);
     }
+
+    return data;
   }
 
   if (isError && error) {
