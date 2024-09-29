@@ -13,11 +13,18 @@ export const UsersSettingsSchema = z.object({
     .string({
       required_error: "Nome de usuário é obrigatório!",
     })
-    .min(USERNAME_MIN_LENGTH, "Nome de usuário muito curto!")
-    .max(USERNAME_MAX_LENGTH, "Nome de usuário muito longo!")
     .regex(USERNAME_REGEX, {
-      message: "Nome de usuário inválido! Use apenas letras, números, - e _",
-    }),
+      message:
+        "Nome de usuário inválido! Use apenas letras, números, espaços, - ou _",
+    })
+    .min(
+      USERNAME_MIN_LENGTH,
+      `Nome de usuário muito curto, mínimo de ${USERNAME_MIN_LENGTH} caracteres!`
+    )
+    .max(
+      USERNAME_MAX_LENGTH,
+      `Nome de usuário muito longo, máximo de ${USERNAME_MAX_LENGTH} caracteres!`
+    ),
 
   birthday: z
     .date({
@@ -30,13 +37,9 @@ export const UsersSettingsSchema = z.object({
 
   profilePicture: FileSchemaValidation.nullable(),
 
-  termsAndConditions: z
-    .boolean({
-      required_error: "Você deve preencher os termos e condições!",
-    })
-    .refine((value) => value === true, {
-      message: "Você deve aceitar os termos e condições!",
-    }),
+  termsAndConditions: z.boolean().refine((value) => value === true, {
+    message: "Para continuar, você deve aceitar os termos e condições!",
+  }),
 });
 
 export type UsersSettingsSchemaType = z.infer<typeof UsersSettingsSchema>;

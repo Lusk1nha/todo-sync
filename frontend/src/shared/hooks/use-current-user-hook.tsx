@@ -15,7 +15,7 @@ interface IUseCurrentUser {
 export const useCurrentUser = (): IUseCurrentUser => {
   const { getCurrentUser } = new UsersProfilesService();
   const { toast } = useToast();
-  const [_, setProfile] = useAtom(profileAtom);
+  const [profile, setProfile] = useAtom(profileAtom);
 
   const {
     data: currentUser,
@@ -27,6 +27,7 @@ export const useCurrentUser = (): IUseCurrentUser => {
     queryFn: fetchUser,
     initialData: null,
     refetchOnWindowFocus: false,
+    enabled: !profile,
   });
 
   useEffect(() => {

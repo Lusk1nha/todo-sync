@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { profileAtom } from "@/shared/atoms";
-import { Separator } from "./ui/separator";
 
-import { LogoutButton } from "./buttons/logout-button";
-import { UserSettingsButton } from "./buttons/user-settings-button";
+import { profileAtom } from "@/shared/atoms";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separator } from "../ui/separator";
+import { UserSettingsButton } from "../buttons/user-settings-button";
+import { LogoutButton } from "../buttons/logout-button";
 
 export function UserMenu() {
   const [profile] = useAtom(profileAtom);

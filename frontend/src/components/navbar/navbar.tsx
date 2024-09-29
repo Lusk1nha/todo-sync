@@ -5,13 +5,12 @@ import { NavRouteLink } from "./nav-redirects";
 
 export function Navbar() {
   const routes = [
-    { label: "Home", href: RoutesEnum.HOME },
-    { label: "About", href: "/about" },
+    { label: "Inicial", href: RoutesEnum.HOME },
   ] as NavRouteLink[];
 
   return (
     <>
-      <DesktopNavbar routes={routes} />
+      <DesktopNavbar />
       <MobileNavbar routes={routes} />
     </>
   );

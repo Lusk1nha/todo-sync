@@ -42,11 +42,20 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
   function getDefaultUserSettings(
     user?: UserProfile | null
   ): UsersSettingsSchemaType {
+    if (!user) {
+      return {
+        username: "",
+        birthday: null,
+        profilePicture: null,
+        termsAndConditions: false,
+      };
+    }
+
     return {
-      username: user?.username ?? "",
+      username: user.username,
       birthday: user?.birthday ?? null,
       profilePicture: null,
-      termsAndConditions: false,
+      termsAndConditions: true,
     };
   }
 

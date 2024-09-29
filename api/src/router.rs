@@ -17,7 +17,7 @@ use tower_http::cors::CorsLayer;
 use crate::{
     auth::{login, logout, signup},
     auth_token::auth_middleware,
-    users_profile::{create_user_profile_route, get_current_user},
+    users_profile::{create_user_profile_route, get_current_user, update_user_profile_route},
     AppState,
 };
 
@@ -69,7 +69,10 @@ fn auth_routes(app_state: Arc<AppState>) -> Router {
 
 fn users_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
     Router::new()
-        .route(USERS_CURRENT_PATH, get(get_current_user))
+        .route(
+            USERS_CURRENT_PATH,
+            get(get_current_user).patch(update_user_profile_route),
+        )
         .route(USERS_CREATE_PATH, post(create_user_profile_route))
         .with_state(app_state)
 }
