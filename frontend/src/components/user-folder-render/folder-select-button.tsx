@@ -18,7 +18,7 @@ export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
           opacity: 1,
         },
       }}
-      className="group w-full flex h-12 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-primary hover:text-white transition-all duration-100"
+      className="group w-full flex min-h-10 h-10 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-primary hover:text-white transition-all duration-100"
     >
       <button className="w-full h-full flex items-center justify-start gap-2">
         <Folder className="w-5 h-5" />

@@ -11,7 +11,7 @@ interface IFolderSheetProps {
   setOpen: (value: boolean) => void;
 }
 
-export function FolderSheet(props: Readonly<IFolderSheetProps>) {
+export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
   const { open, setOpen } = props;
 
   return (

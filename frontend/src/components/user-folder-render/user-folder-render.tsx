@@ -1,52 +1,88 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { FolderSelectButton } from "./folder-select-button";
-import { CreateFolderButton } from "./create-folder-button";
-import { FolderSheet } from "../sheets/folder-sheet";
-import { useState } from "react";
+import { CreateFolderSheet } from "../sheets/create-folder-sheet";
+import { useMemo, useState } from "react";
+import { FoldersTitle } from "./folders-title";
+import { Folder } from "@/shared/factories/folders-factory";
+import { generateFoldersMockup } from "@/shared/mocks/folders-mockup";
+import { FolderRender } from "./folder-render";
+
+import {
+  getSortedFoldersByDate,
+  groupFoldersByDate,
+  getSortedFoldersByName,
+  groupFoldersByFirstLetter,
+} from "@/shared/helpers/folders-helper";
+import { useAtom } from "jotai";
+import { folderSettingsAtom } from "@/shared/atoms";
+
+export type FolderSettings = {
+  groupBy: FolderGroupBy;
+  sortDirection: FolderSortDirection;
+};
+
+export type FolderGroupBy = "date" | "first-letter" | "none";
+export type FolderSortDirection = "asc" | "desc";
 
 export function UserFolderRender() {
+  const [settings, setSettings] = useAtom(folderSettingsAtom);
+  const { groupBy, sortDirection } = settings;
+
   const [open, setOpen] = useState(false);
 
-  const sets = [
-    "Inbox",
-    "Today",
-    "Next 7 Days",
-    "Projects",
-    "Tags",
-    "Filters",
-    "Archive",
-    "Trash",
-  ];
+  const response = generateFoldersMockup(50);
+
+  const folders: Folder[] = useMemo(() => {
+    const sorted = getSortedFoldersByName(response, sortDirection);
+    return sorted;
+  }, [sortDirection]);
+
+  const foldersGroupBy: Record<string, Folder[]> | null = useMemo(() => {
+    if (groupBy === "date") {
+      const sortedFolders = getSortedFoldersByDate(
+        folders,
+        "updated_at",
+        sortDirection
+      );
+
+      return groupFoldersByDate(sortedFolders);
+    }
+
+    if (groupBy === "first-letter") {
+      const sortedFolders = getSortedFoldersByName(folders, sortDirection);
+      return groupFoldersByFirstLetter(sortedFolders);
+    }
+
+    return {} as Record<string, Folder[]>;
+  }, [folders, groupBy]);
+
+  function handleGroupByChange(groupBy: FolderGroupBy) {
+    localStorage.setItem("todo-sync:group-by", groupBy);
+    setSettings({ ...settings, groupBy });
+  }
+
+  function handleSortDirectionChange(sort: FolderSortDirection) {
+    localStorage.setItem("todo-sync:sort-direction", sort);
+    setSettings({ ...settings, sortDirection: sort });
+  }
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-xs tracking-widest text-muted-foreground uppercase px-9">
-        Pastas (8)
-      </h2>
+      <FoldersTitle
+        count={folders.length}
+        groupBy={groupBy}
+        setGroupBy={handleGroupByChange}
+        sortDirection={sortDirection}
+        setSortDirection={handleSortDirectionChange}
+      />
 
-      <AnimatePresence>
-        <motion.ul
-          variants={{
-            visible: {
-              transition: {
-                delayChildren: 0.2,
-                staggerChildren: 0.05,
-              },
-            },
-          }}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col pr-6"
-        >
-          {sets.map((set) => (
-            <FolderSelectButton key={set} text={set} />
-          ))}
+      <FolderRender
+        folders={folders}
+        setOpen={setOpen}
+        groupBy={groupBy}
+        groupFolders={foldersGroupBy}
+        sortDirection={sortDirection}
+      />
 
-          <CreateFolderButton onClick={() => setOpen((prev) => !prev)} />
-        </motion.ul>
-      </AnimatePresence>
-
-      <FolderSheet open={open} setOpen={setOpen} />
+      <CreateFolderSheet open={open} setOpen={setOpen} />
     </section>
   );
 }
