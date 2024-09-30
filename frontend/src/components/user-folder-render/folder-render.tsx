@@ -8,8 +8,6 @@ interface IFolderRenderProps {
   folders: Folder[];
   groupFolders: Record<string, Folder[]>;
 
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-
   sortDirection: FolderSortDirection;
 }
 

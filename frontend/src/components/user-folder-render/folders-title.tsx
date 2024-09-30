@@ -1,4 +1,6 @@
-import { FolderGroupButton } from "./folder-group-button";
+import { CreateFolderSheet } from "../sheets/create-folder-sheet";
+
+import { FolderGroupMenu } from "./folder-group-menu";
 import { FolderGroupBy, FolderSortDirection } from "./user-folder-render";
 
 type FoldersTitleStrings = {
@@ -34,13 +36,17 @@ export function FoldersTitle(props: Readonly<IFoldersTitleProps>) {
         {strings.text} ({count})
       </h2>
 
-      <FolderGroupButton
-        className="h-8"
-        groupBy={groupBy}
-        setGroupBy={setGroupBy}
-        sortDirection={sortDirection}
-        setSortDirection={setSortDirection}
-      />
+      <div className="flex gap-2">
+        <CreateFolderSheet />
+
+        <FolderGroupMenu
+          className="h-8"
+          groupBy={groupBy}
+          setGroupBy={setGroupBy}
+          sortDirection={sortDirection}
+          setSortDirection={setSortDirection}
+        />
+      </div>
     </div>
   );
 }

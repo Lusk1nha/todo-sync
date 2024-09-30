@@ -5,12 +5,14 @@ import { faker } from "@faker-js/faker";
 export function createFolderMockup(): Folder {
   const mockup = {
     id: faker.string.uuid(),
-    name: faker.lorem.word(),
+    name: faker.lorem.lines(1),
     user_id: faker.number.int(),
     created_at: faker.date.recent().toISOString(),
-    updated_at: faker.date.recent({
-      days: 30
-    }).toISOString(),
+    updated_at: faker.date
+      .recent({
+        days: 30,
+      })
+      .toISOString(),
   } as IFolderResponse;
 
   return new Folder(mockup);

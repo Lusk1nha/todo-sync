@@ -1,5 +1,4 @@
-import { CreateFolderSheet } from "../sheets/create-folder-sheet";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { FoldersTitle } from "./folders-title";
 import { Folder } from "@/shared/factories/folders-factory";
 import { generateFoldersMockup } from "@/shared/mocks/folders-mockup";
@@ -26,9 +25,7 @@ export function UserFolderRender() {
   const [settings, setSettings] = useAtom(folderSettingsAtom);
   const { groupBy, sortDirection } = settings;
 
-  const [open, setOpen] = useState(false);
-
-  const response = generateFoldersMockup(50);
+  const response = generateFoldersMockup(100);
 
   const folders: Folder[] = useMemo(() => {
     const sorted = getSortedFoldersByName(response, sortDirection);
@@ -76,13 +73,10 @@ export function UserFolderRender() {
 
       <FolderRender
         folders={folders}
-        setOpen={setOpen}
         groupBy={groupBy}
         groupFolders={foldersGroupBy}
         sortDirection={sortDirection}
       />
-
-      <CreateFolderSheet open={open} setOpen={setOpen} />
     </section>
   );
 }
