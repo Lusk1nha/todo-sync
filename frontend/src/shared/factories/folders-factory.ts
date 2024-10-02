@@ -1,4 +1,4 @@
-import { IFolderResponse } from "../repositories/folder-repo";
+import { IFolderResponse } from "../repositories/folders-repo";
 
 export class Folder {
   private _id: string;

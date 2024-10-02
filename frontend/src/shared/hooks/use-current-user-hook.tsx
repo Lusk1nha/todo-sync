@@ -34,7 +34,7 @@ export const useCurrentUser = (): IUseCurrentUser => {
     if (currentUser) {
       setProfile(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, setProfile]);
 
   async function fetchUser() {
     try {

@@ -17,6 +17,7 @@ use tower_http::cors::CorsLayer;
 use crate::{
     auth::{login, logout, signup},
     auth_token::auth_middleware,
+    folders::{create_folder_route, get_folders_by_user_id_route},
     users_profile::{create_user_profile_route, get_current_user, update_user_profile_route},
     AppState,
 };
@@ -77,6 +78,13 @@ fn users_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
         .with_state(app_state)
 }
 
+fn folders_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
+    Router::new()
+        .route("/", get(get_folders_by_user_id_route))
+        .route("/new", post(create_folder_route))
+        .with_state(app_state)
+}
+
 // Middleware ajustado para aceitar `Arc<AppState>`
 async fn auth_middleware_fn(
     req: Request<axum::body::Body>,
@@ -88,10 +96,12 @@ async fn auth_middleware_fn(
 
 fn protected_routes(app_state: Arc<AppState>) -> Router {
     let users = users_routes(app_state.clone());
+    let folders = folders_routes(app_state.clone());
 
     Router::new()
         .route(LOGOUT_PATH, post(logout))
         .nest(USERS_GROUP_PATH, users)
+        .nest("/folders", folders)
         .layer(ServiceBuilder::new().layer(from_fn({
             let app_state = app_state.clone(); // Clone app_state for the async block
             move |req, next| {

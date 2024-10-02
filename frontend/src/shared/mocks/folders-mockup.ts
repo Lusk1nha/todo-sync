@@ -1,5 +1,5 @@
 import { Folder } from "../factories/folders-factory";
-import { IFolderResponse } from "../repositories/folder-repo";
+import { IFolderResponse } from "../repositories/folders-repo";
 import { faker } from "@faker-js/faker";
 
 export function createFolderMockup(): Folder {

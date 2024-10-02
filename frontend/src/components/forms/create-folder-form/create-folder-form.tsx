@@ -14,6 +14,7 @@ import { FolderSchema, FolderSchemaType } from "@/shared/schemas/folder-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ICreateFolderFormProps {
   onSubmit: (data: FolderSchemaType) => void;
@@ -25,6 +26,11 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
   const form = useForm<FolderSchemaType>({
     resolver: zodResolver(FolderSchema),
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      description: "",
+      color: "#f97316",
+    },
   });
 
   const { control, handleSubmit, formState } = form;
@@ -39,7 +45,7 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome</FormLabel>
+                <FormLabel required>Nome</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Insira o nome da pasta"
@@ -61,10 +67,36 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
 
           <FormField
             control={control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descrição</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Insira a descrição da pasta"
+                    name={field.name}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                    rows={4}
+                  />
+                </FormControl>
+
+                <FormDescription>
+                  A descrição é utilizada para descrever o conteúdo da pasta
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cor da Pasta</FormLabel>
+                <FormLabel required>Cor da Pasta</FormLabel>
                 <FormControl>
                   <ColorPicker
                     value={field.value}
@@ -73,6 +105,9 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
                   />
                 </FormControl>
 
+                <FormDescription>
+                  A cor da pasta é utilizada para identificar a pasta
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

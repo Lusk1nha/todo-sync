@@ -5,6 +5,8 @@ import { AnimatedCounter } from "../utilities/animated-counter";
 import { FolderGroupMenu } from "./folder-group-menu";
 import { FolderGroupBy, FolderSortDirection } from "./user-folder-render";
 import { useAtom } from "jotai";
+import { Button } from "../ui/button";
+import { RefreshCcw } from "lucide-react";
 
 type FoldersTitleStrings = {
   text?: string;
@@ -13,6 +15,8 @@ type FoldersTitleStrings = {
 interface IFoldersTitleProps {
   strings?: FoldersTitleStrings;
   count: number;
+
+  onRefresh: () => void;
 
   setGroupBy: (sort: FolderGroupBy) => void;
 
@@ -25,6 +29,7 @@ export function FoldersTitle(props: Readonly<IFoldersTitleProps>) {
       text: "Pastas",
     },
     count,
+    onRefresh,
     setGroupBy,
     setSortDirection,
   } = props;
@@ -38,7 +43,17 @@ export function FoldersTitle(props: Readonly<IFoldersTitleProps>) {
         {strings.text} (<AnimatedCounter from={0} to={count} />)
       </h2>
 
-      <div className="flex gap-2">
+      <div className="flex gap-1">
+        <Button
+          className="h-8"
+          size="sm"
+          variant="ghost"
+          type="button"
+          onClick={onRefresh}
+        >
+          <RefreshCcw className="h-4 w-4" />
+        </Button>
+
         <CreateFolderSheet />
 
         <FolderGroupMenu

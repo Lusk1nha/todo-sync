@@ -22,6 +22,7 @@ pub struct UserProfile {
     pub profile_picture_url: Option<String>,
 
     pub created_at: chrono::NaiveDateTime,
+    pub updated_at: chrono::NaiveDateTime,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

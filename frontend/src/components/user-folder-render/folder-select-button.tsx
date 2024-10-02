@@ -12,6 +12,12 @@ interface IFolderSelectButtonProps {
 export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
   const { id, text, description } = props;
 
+  function getShortDescription(description: string): string {
+    return description.length > 255
+      ? `${description.slice(0, 255)}...`
+      : description;
+  }
+
   return (
     <motion.li
       data-guid-id={id}
@@ -40,7 +46,7 @@ export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
           </button>
         </TooltipTrigger>
         <TooltipContent className="max-w-80" sideOffset={50} side="right">
-          {description}
+          {description ? getShortDescription(description) : "-"}
         </TooltipContent>
       </Tooltip>
     </motion.li>

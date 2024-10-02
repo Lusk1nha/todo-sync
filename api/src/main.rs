@@ -4,6 +4,7 @@ mod database;
 mod router;
 mod users;
 mod users_profile;
+mod folders;
 
 use router::create_router;
 use sqlx::{Pool, Postgres};

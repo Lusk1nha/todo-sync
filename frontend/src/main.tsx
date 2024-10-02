@@ -20,6 +20,8 @@ import LoginRoute from "./routes/auth/login-user-route";
 import RegisterUserRoute from "./routes/auth/register-user-route";
 
 import HomeRoute from "./routes/home-route";
+import ProtectedAuthRoute from "./routes/middlewares/auth-protected-middleware-route";
+import UserProfileMiddlewareRoute from "./routes/middlewares/user-profile-middleware-route";
 import { queryClient } from "./shared/helpers/react-query-helper";
 
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -36,15 +38,15 @@ const router = createBrowserRouter(
       element={<App />}
       errorElement={<NotFoundRoute />}
     >
-      {/* <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}> */}
-      {/* <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}> */}
-      <Route path={RoutesEnum.ROOT} element={<MainContentRoute />}>
-        <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
-      </Route>
-      {/* </Route> */}
+      <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
+        <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}>
+          <Route path={RoutesEnum.ROOT} element={<MainContentRoute />}>
+            <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+          </Route>
+        </Route>
 
-      <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
-      {/* </Route> */}
+        <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
+      </Route>
 
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
         <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />

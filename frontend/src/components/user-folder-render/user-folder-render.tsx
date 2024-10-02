@@ -1,7 +1,7 @@
-import { Suspense, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { FoldersTitle } from "./folders-title";
 import { Folder } from "@/shared/factories/folders-factory";
-import { generateFoldersMockup } from "@/shared/mocks/folders-mockup";
+
 import { FolderRender } from "./folder-render";
 
 import {
@@ -13,6 +13,9 @@ import {
 
 import { useAtom } from "jotai";
 import { folderSettingsAtom } from "@/shared/atoms";
+import { useQuery } from "@tanstack/react-query";
+import { FoldersService } from "@/shared/services/folders-service";
+import { LoadingSpinner } from "../ui/loading-spinner";
 
 export type FolderSettings = {
   groupBy: FolderGroupBy;
@@ -26,12 +29,30 @@ export function UserFolderRender() {
   const [settings, setSettings] = useAtom(folderSettingsAtom);
   const { groupBy, sortDirection } = settings;
 
-  const response = generateFoldersMockup(0);
+  const { list } = new FoldersService();
+
+  const {
+    data: response,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["folders"],
+    queryFn: getFolders,
+
+    initialData: [],
+
+    refetchOnWindowFocus: false,
+  });
+
+  async function getFolders(): Promise<Folder[]> {
+    const folders = await list();
+    return folders;
+  }
 
   const folders: Folder[] = useMemo(() => {
     const sorted = getSortedFoldersByName(response, sortDirection);
     return sorted;
-  }, [sortDirection]);
+  }, [response, sortDirection]);
 
   const foldersGroupBy: Record<string, Folder[]> | null = useMemo(() => {
     if (groupBy === "date") {
@@ -50,7 +71,7 @@ export function UserFolderRender() {
     }
 
     return {} as Record<string, Folder[]>;
-  }, [folders, groupBy]);
+  }, [folders, sortDirection, groupBy]);
 
   const handleGroupByChange = useCallback(
     (groupBy: FolderGroupBy) => {
@@ -72,24 +93,46 @@ export function UserFolderRender() {
     <section className="flex flex-col gap-3">
       <FoldersTitle
         count={folders.length}
+        onRefresh={refetch}
         setGroupBy={handleGroupByChange}
         setSortDirection={handleSortDirectionChange}
       />
 
-      {folders.length === 0 ? (
-        <EmptyFolder />
+      {isFetching ? (
+        <LoadingFolder />
       ) : (
-        <Suspense>
-          <FolderRender folders={folders} groupFolders={foldersGroupBy} />
-        </Suspense>
+        <ContentFolder folders={folders} groupFolders={foldersGroupBy} />
       )}
     </section>
   );
 }
 
+interface IFolderRenderProps {
+  folders: Folder[];
+  groupFolders: Record<string, Folder[]>;
+}
+
+function ContentFolder(props: Readonly<IFolderRenderProps>) {
+  const { folders, groupFolders } = props;
+
+  if (folders.length === 0) {
+    return <EmptyFolder />;
+  }
+
+  return <FolderRender folders={folders} groupFolders={groupFolders} />;
+}
+
+function LoadingFolder() {
+  return (
+    <div className="flex items-center justify-center mt-4">
+      <LoadingSpinner className="w-10 h-10" />
+    </div>
+  );
+}
+
 function EmptyFolder() {
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-4">
       <p className="text-sm text-muted-foreground">
         Nenhuma pasta foi encontrada.
       </p>

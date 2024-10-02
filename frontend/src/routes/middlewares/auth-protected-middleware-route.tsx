@@ -30,7 +30,7 @@ export default function AuthProtectedMiddlewareRoute() {
       const redirect = getRedirectPath(pathname, searchParams);
       setSearchParams(redirect);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, pathname, searchParams, setSearchParams, toast]);
 
   if (!isAuthenticated) {
     return <Navigate to={RoutesEnum.LOGIN} />;

@@ -11,6 +11,10 @@ import { useState } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { CreateFolderForm } from "../forms/create-folder-form/create-folder-form";
+import { FolderSchemaType } from "@/shared/schemas/folder-schema";
+import { FoldersService } from "@/shared/services/folders-service";
+import { ICreateFolderRequest } from "@/shared/repositories/folders-repo";
+import { useMutation } from "@tanstack/react-query";
 
 interface IFolderSheetProps {
   variant?: "mini" | "full";
@@ -19,6 +23,25 @@ interface IFolderSheetProps {
 export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
   const { variant = "mini" } = props;
   const [open, setOpen] = useState(false);
+
+  const { mutate } = useMutation({
+    mutationFn: onSubmit,
+    onSuccess: () => {
+      setOpen(false);
+    },
+  });
+
+  async function onSubmit(data: FolderSchemaType) {
+    const { create } = new FoldersService();
+
+    const payload = {
+      name: data.name,
+      description: data.description,
+      color: data.color,
+    } as ICreateFolderRequest;
+
+    await create(payload);
+  }
 
   function handleOpen() {
     setOpen(true);
@@ -52,12 +75,7 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
           </SheetDescription>
         </SheetHeader>
         <div className="w-full h-full mt-8">
-          <CreateFolderForm
-            onSubmit={(data) => {
-              console.log(data);
-              setOpen(false);
-            }}
-          />
+          <CreateFolderForm onSubmit={mutate} />
         </div>
       </SheetContent>
     </Sheet>
