@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import { FoldersTitle } from "./folders-title";
 import { Folder } from "@/shared/factories/folders-factory";
 import { generateFoldersMockup } from "@/shared/mocks/folders-mockup";
@@ -10,6 +10,7 @@ import {
   getSortedFoldersByName,
   groupFoldersByFirstLetter,
 } from "@/shared/helpers/folders-helper";
+
 import { useAtom } from "jotai";
 import { folderSettingsAtom } from "@/shared/atoms";
 
@@ -25,7 +26,7 @@ export function UserFolderRender() {
   const [settings, setSettings] = useAtom(folderSettingsAtom);
   const { groupBy, sortDirection } = settings;
 
-  const response = generateFoldersMockup(100);
+  const response = generateFoldersMockup(0);
 
   const folders: Folder[] = useMemo(() => {
     const sorted = getSortedFoldersByName(response, sortDirection);
@@ -51,32 +52,47 @@ export function UserFolderRender() {
     return {} as Record<string, Folder[]>;
   }, [folders, groupBy]);
 
-  function handleGroupByChange(groupBy: FolderGroupBy) {
-    localStorage.setItem("todo-sync:group-by", groupBy);
-    setSettings({ ...settings, groupBy });
-  }
+  const handleGroupByChange = useCallback(
+    (groupBy: FolderGroupBy) => {
+      localStorage.setItem("todo-sync:group-by", groupBy);
+      setSettings({ ...settings, groupBy });
+    },
+    [settings, setSettings]
+  );
 
-  function handleSortDirectionChange(sort: FolderSortDirection) {
-    localStorage.setItem("todo-sync:sort-direction", sort);
-    setSettings({ ...settings, sortDirection: sort });
-  }
+  const handleSortDirectionChange = useCallback(
+    (sort: FolderSortDirection) => {
+      localStorage.setItem("todo-sync:sort-direction", sort);
+      setSettings({ ...settings, sortDirection: sort });
+    },
+    [settings, setSettings]
+  );
 
   return (
     <section className="flex flex-col gap-3">
       <FoldersTitle
         count={folders.length}
-        groupBy={groupBy}
         setGroupBy={handleGroupByChange}
-        sortDirection={sortDirection}
         setSortDirection={handleSortDirectionChange}
       />
 
-      <FolderRender
-        folders={folders}
-        groupBy={groupBy}
-        groupFolders={foldersGroupBy}
-        sortDirection={sortDirection}
-      />
+      {folders.length === 0 ? (
+        <EmptyFolder />
+      ) : (
+        <Suspense>
+          <FolderRender folders={folders} groupFolders={foldersGroupBy} />
+        </Suspense>
+      )}
     </section>
+  );
+}
+
+function EmptyFolder() {
+  return (
+    <div className="flex items-center justify-center">
+      <p className="text-sm text-muted-foreground">
+        Nenhuma pasta foi encontrada.
+      </p>
+    </div>
   );
 }

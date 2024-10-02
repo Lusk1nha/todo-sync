@@ -3,14 +3,18 @@ import { Folder } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface IFolderSelectButtonProps {
+  id: string;
   text: string;
+
+  description?: string | null | undefined;
 }
 
 export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
-  const { text } = props;
+  const { id, text, description } = props;
 
   return (
     <motion.li
+      data-guid-id={id}
       variants={{
         hidden: {
           opacity: 0,
@@ -35,8 +39,8 @@ export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
             </div>
           </button>
         </TooltipTrigger>
-        <TooltipContent sideOffset={50} side="right">
-          {text}
+        <TooltipContent className="max-w-80" sideOffset={50} side="right">
+          {description}
         </TooltipContent>
       </Tooltip>
     </motion.li>

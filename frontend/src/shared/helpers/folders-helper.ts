@@ -2,6 +2,7 @@ import { FolderSortDirection } from "@/components/user-folder-render/user-folder
 import { Folder } from "../factories/folders-factory";
 
 import { format, isSameDay, isSameWeek } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export function formatFolderDate(date: Date): string {
   const today = new Date();
@@ -18,7 +19,7 @@ export function formatFolderDate(date: Date): string {
   }
 
   if (isSameWeek(date, today)) {
-    return format(date, "EEEE");
+    return format(date, "EEEE", { locale: ptBR });
   }
 
   return format(date, "dd/MM/yyyy");

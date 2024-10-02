@@ -12,25 +12,29 @@ import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { CreateFolderForm } from "../forms/create-folder-form/create-folder-form";
 
-interface IFolderSheetProps {}
+interface IFolderSheetProps {
+  variant?: "mini" | "full";
+}
 
 export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
-  const {} = props;
-
+  const { variant = "mini" } = props;
   const [open, setOpen] = useState(false);
+
+  function handleOpen() {
+    setOpen(true);
+  }
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            type="button"
-            className="h-8 data-[state=open]:bg-accent"
-            onClick={() => setOpen(true)}
-          >
-            <FolderPlus className="h-4 w-4" />
-          </Button>
+          <div>
+            {variant === "mini" ? (
+              <MinimalButton onClick={handleOpen} />
+            ) : (
+              <FullButton onClick={handleOpen} />
+            )}
+          </div>
         </TooltipTrigger>
         <TooltipContent>Criar nova pasta</TooltipContent>
       </Tooltip>
@@ -57,5 +61,46 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
         </div>
       </SheetContent>
     </Sheet>
+  );
+}
+
+interface IFullButtonProps {
+  onClick: () => void;
+}
+
+function FullButton(props: Readonly<IFullButtonProps>) {
+  const { onClick } = props;
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      type="button"
+      className="text-primary h-8 gap-2"
+      onClick={onClick}
+    >
+      <FolderPlus className="h-4 w-4" />
+      Criar nova pasta
+    </Button>
+  );
+}
+
+interface IMinimalButtonProps {
+  onClick: () => void;
+}
+
+function MinimalButton(props: Readonly<IMinimalButtonProps>) {
+  const { onClick } = props;
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      type="button"
+      className="text-primary h-8 data-[state=open]:bg-accent"
+      onClick={onClick}
+    >
+      <FolderPlus className="h-4 w-4" />
+    </Button>
   );
 }

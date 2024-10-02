@@ -13,6 +13,7 @@ export function ThemeSwitch() {
           "h-5 w-5",
           theme === "light" ? "text-primary" : "text-muted-foreground"
         )}
+        onClick={() => setTheme("light")}
       />
 
       <Switch
@@ -25,6 +26,7 @@ export function ThemeSwitch() {
           "h-5 w-5",
           theme === "dark" ? "text-primary" : "text-muted-foreground"
         )}
+        onClick={() => setTheme("dark")}
       />
     </div>
   );

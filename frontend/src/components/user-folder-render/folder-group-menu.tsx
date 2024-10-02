@@ -21,6 +21,19 @@ import {
 
 type FolderGroupStrings = {
   text?: string;
+
+  groupBy?: {
+    title?: string;
+    none?: string;
+    firstLetter?: string;
+    date?: string;
+  };
+
+  sortDirection?: {
+    title?: string;
+    asc?: string;
+    desc?: string;
+  };
 };
 
 interface IFolderGroupMenuProps {
@@ -38,9 +51,22 @@ export function FolderGroupMenu(props: Readonly<IFolderGroupMenuProps>) {
   const {
     className,
     strings = {
-      text: "Agrupar por",
+      text: "Configurações",
+      groupBy: {
+        title: "Agrupado por",
+        none: "Remover agrupamento",
+        firstLetter: "Primeira Letra",
+        date: "Data de Modificação",
+      },
+      sortDirection: {
+        title: "Ordenar por",
+        asc: "Crescente",
+        desc: "Decrescente",
+      },
     },
+    groupBy,
     setGroupBy,
+    sortDirection,
     setSortDirection,
   } = props;
 
@@ -61,39 +87,59 @@ export function FolderGroupMenu(props: Readonly<IFolderGroupMenuProps>) {
         <DropdownMenuContent>
           <DropdownMenuLabel>Configurações</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-xs">
-            Agrupar as pastas por
+          <DropdownMenuLabel className="font-medium text-xs">
+            {strings?.groupBy?.title}
           </DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setGroupBy("none")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setGroupBy("none")}
+            disabled={groupBy === "none"}
+          >
             <CircleX className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Remover agrupamento
+            {strings?.groupBy?.none}
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setGroupBy("first-letter")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setGroupBy("first-letter")}
+            disabled={groupBy === "first-letter"}
+          >
             <CaseUpper className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Primeira Letra
+            {strings?.groupBy?.firstLetter}
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setGroupBy("date")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setGroupBy("date")}
+            disabled={groupBy === "date"}
+          >
             <CalendarDays className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Data de Modificação
+            {strings?.groupBy?.date}
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuLabel className="text-xs">
-            Ordenar as pastas por
+          <DropdownMenuLabel className="font-medium text-xs">
+            {strings?.sortDirection?.title}
           </DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setSortDirection("asc")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setSortDirection("asc")}
+            disabled={sortDirection === "asc"}
+          >
             <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Crescente
+            {strings?.sortDirection?.asc}
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setSortDirection("desc")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setSortDirection("desc")}
+            disabled={sortDirection === "desc"}
+          >
             <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70 transform rotate-180" />
-            Decrescente
+            {strings?.sortDirection?.desc}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,22 +1,24 @@
 import { Folder } from "@/shared/factories/folders-factory";
-import { FolderGroupBy, FolderSortDirection } from "./user-folder-render";
+
 import { FolderLinearRender } from "./folder-linear-render";
 import { GroupFolderRender } from "./group-folder-render";
+import { folderSettingsAtom } from "@/shared/atoms";
+import { useAtom } from "jotai";
 
 interface IFolderRenderProps {
-  groupBy: FolderGroupBy;
   folders: Folder[];
   groupFolders: Record<string, Folder[]>;
-
-  sortDirection: FolderSortDirection;
 }
 
 export function FolderRender(props: Readonly<IFolderRenderProps>) {
-  const { groupBy, folders, groupFolders } = props;
+  const { folders, groupFolders } = props;
+  const [settings] = useAtom(folderSettingsAtom);
+
+  const { groupBy } = settings;
 
   if (groupBy === "none") {
     return <FolderLinearRender folders={folders} />;
   }
 
-  return <GroupFolderRender hashFolders={groupFolders} />;
+  return <GroupFolderRender hash={groupFolders} />;
 }

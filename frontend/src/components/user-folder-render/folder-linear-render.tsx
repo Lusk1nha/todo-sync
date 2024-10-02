@@ -25,7 +25,12 @@ export function FolderLinearRender(props: Readonly<IFolderLinearRenderProps>) {
       >
         <motion.ul className="flex flex-col pr-6 overflow-y-auto mr-6">
           {folders.map((set) => (
-            <FolderSelectButton key={set.id} text={set.name} />
+            <FolderSelectButton
+              key={set.id}
+              id={set.id}
+              text={set.name}
+              description={set.description}
+            />
           ))}
         </motion.ul>
       </motion.div>

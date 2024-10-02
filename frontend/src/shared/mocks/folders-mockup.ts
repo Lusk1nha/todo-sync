@@ -5,7 +5,9 @@ import { faker } from "@faker-js/faker";
 export function createFolderMockup(): Folder {
   const mockup = {
     id: faker.string.uuid(),
-    name: faker.lorem.lines(1),
+    name: faker.lorem.paragraph(),
+    description: faker.lorem.paragraphs(),
+    color: faker.internet.color(),
     user_id: faker.number.int(),
     created_at: faker.date.recent().toISOString(),
     updated_at: faker.date

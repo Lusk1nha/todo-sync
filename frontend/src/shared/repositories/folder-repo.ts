@@ -3,7 +3,8 @@ import axios from "axios";
 export interface IFolderResponse {
   id: string;
   name: string;
-
+  description: string | null | undefined;
+  color: string;
   user_id: number;
   created_at: string;
   updated_at: string;
