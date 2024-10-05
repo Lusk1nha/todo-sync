@@ -45,6 +45,7 @@ function RenderGroup(props: Readonly<IRenderGroupProps>) {
   return (
     <div key={name} className="flex flex-col gap-2">
       <motion.h3
+        title={name}
         variants={{
           hidden: {
             opacity: 0,

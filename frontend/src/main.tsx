@@ -31,6 +31,8 @@ import { WizardPage } from "./routes/wizard-route";
 import { MainContentRoute } from "./routes/main-content-route";
 import { NotFoundRoute } from "./routes/not-found-route";
 
+import { FolderMiddlewareRoute } from "./routes/middlewares/folder-middleware-route";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
@@ -42,6 +44,10 @@ const router = createBrowserRouter(
         <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}>
           <Route path={RoutesEnum.ROOT} element={<MainContentRoute />}>
             <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+            <Route
+              path={RoutesEnum.FOLDER}
+              element={<FolderMiddlewareRoute />}
+            />
           </Route>
         </Route>
 

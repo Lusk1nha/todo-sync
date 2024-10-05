@@ -13,8 +13,9 @@ import { Input } from "@/components/ui/input";
 import { FolderSchema, FolderSchemaType } from "@/shared/schemas/folder-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { ColorPicker } from "@/components/ui/color-picker";
+
 import { Textarea } from "@/components/ui/textarea";
+import { ColumnsFolderRepeater } from "./columns-folder-repeater";
 
 interface ICreateFolderFormProps {
   onSubmit: (data: FolderSchemaType) => void;
@@ -29,6 +30,20 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
     defaultValues: {
       name: "",
       description: "",
+      columns: [
+        {
+          name: "Todo",
+          position: 0,
+        },
+        {
+          name: "Doing",
+          position: 1,
+        },
+        {
+          name: "Done",
+          position: 2,
+        },
+      ],
       color: "#f97316",
     },
   });
@@ -91,27 +106,7 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
             )}
           />
 
-          <FormField
-            control={control}
-            name="color"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel required>Cor da Pasta</FormLabel>
-                <FormControl>
-                  <ColorPicker
-                    value={field.value}
-                    onChange={(value) => field.onChange(value)}
-                    onBlur={field.onBlur}
-                  />
-                </FormControl>
-
-                <FormDescription>
-                  A cor da pasta é utilizada para identificar a pasta
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <ColumnsFolderRepeater control={control} name="columns" />
         </FieldGroup>
 
         <Button

@@ -1,13 +1,13 @@
 import { IFolderResponse } from "../repositories/folders-repo";
 
 export class Folder {
-  private _id: string;
-  private _name: string;
-  private _description: string | null | undefined;
-  private _color: string | null | undefined;
-  private _user_id: number;
-  private _created_at: Date;
-  private _updated_at: Date;
+  private readonly _id: string;
+  private readonly _name: string;
+  private readonly _description: string | null | undefined;
+  private readonly _color: string | null | undefined;
+  private readonly _user_id: number;
+  private readonly _created_at: Date;
+  private readonly _updated_at: Date;
 
   constructor(data: IFolderResponse) {
     if (!data.id) {

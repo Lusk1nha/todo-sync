@@ -45,9 +45,9 @@ export function FoldersTitle(props: Readonly<IFoldersTitleProps>) {
 
       <div className="flex gap-1">
         <Button
-          className="h-8"
-          size="sm"
           variant="ghost"
+          className="text-primary h-8"
+          size="sm"
           type="button"
           onClick={onRefresh}
         >

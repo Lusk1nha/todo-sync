@@ -3,6 +3,12 @@ import { Folder } from "../factories/folders-factory";
 
 import { format, isSameDay, isSameWeek } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { RoutesEnum } from "../enums/routes-enum";
+
+export function generateFolderRedirect(folderId: string): string {
+  const pathWithId = RoutesEnum.FOLDER.replace(":folderId", folderId);
+  return pathWithId;
+}
 
 export function formatFolderDate(date: Date): string {
   const today = new Date();

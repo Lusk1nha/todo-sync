@@ -1,12 +1,6 @@
 import { FolderPlus } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { useState } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -15,6 +9,10 @@ import { FolderSchemaType } from "@/shared/schemas/folder-schema";
 import { FoldersService } from "@/shared/services/folders-service";
 import { ICreateFolderRequest } from "@/shared/repositories/folders-repo";
 import { useMutation } from "@tanstack/react-query";
+import { useToast } from "../ui/use-toast";
+import { Folder } from "@/shared/factories/folders-factory";
+import { queryClient } from "@/shared/helpers/react-query-helper";
+import { FolderColumnsService } from "@/shared/services/folder-columns-service";
 
 interface IFolderSheetProps {
   variant?: "mini" | "full";
@@ -24,15 +22,48 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
   const { variant = "mini" } = props;
   const [open, setOpen] = useState(false);
 
+  const { toast } = useToast();
+
   const { mutate } = useMutation({
     mutationFn: onSubmit,
-    onSuccess: () => {
+    onSuccess(folder) {
+      queryClient.setQueryData<Folder[]>(["folders"], (old) => {
+        if (old) {
+          return [...old, folder];
+        }
+
+        return [folder];
+      });
+
+      createFolderToast(folder);
+    },
+    onError(error) {
+      toast({
+        title: "Erro ao criar pasta",
+        variant: "destructive",
+        description: error.message
+          ? error.message
+          : "Ocorreu um erro ao criar a pasta",
+      });
+    },
+    onSettled() {
       setOpen(false);
     },
   });
 
+  function createFolderToast(folder: Folder) {
+    const message = `Pasta criada com sucesso: ${folder.name}`;
+
+    toast({
+      title: "Pasta criada com sucesso",
+      variant: "default",
+      description: message,
+    });
+  }
+
   async function onSubmit(data: FolderSchemaType) {
     const { create } = new FoldersService();
+    const { create: createColumn } = new FolderColumnsService();
 
     const payload = {
       name: data.name,
@@ -40,7 +71,18 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
       color: data.color,
     } as ICreateFolderRequest;
 
-    await create(payload);
+    const folder = await create(payload);
+    const columns = data.columns.map((column, index) =>
+      createColumn({
+        name: column.name,
+        position: index,
+        folder_id: folder.id,
+      })
+    );
+
+    await Promise.all(columns);
+
+    return folder;
   }
 
   function handleOpen() {
@@ -70,9 +112,6 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
       >
         <SheetHeader>
           <SheetTitle>Criar nova pasta</SheetTitle>
-          <SheetDescription>
-            Crie uma nova pasta para organizar suas tarefas
-          </SheetDescription>
         </SheetHeader>
         <div className="w-full h-full mt-8">
           <CreateFolderForm onSubmit={mutate} />
@@ -115,7 +154,7 @@ function MinimalButton(props: Readonly<IMinimalButtonProps>) {
       variant="ghost"
       size="sm"
       type="button"
-      className="text-primary h-8 data-[state=open]:bg-accent"
+      className="h-8 data-[state=open]:bg-accent"
       onClick={onClick}
     >
       <FolderPlus className="h-4 w-4" />

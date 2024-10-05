@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{
     body::Body,
-    extract::State,
+    extract::{Path, State},
     http::{HeaderMap, Response, StatusCode},
     response::IntoResponse,
     Json,
@@ -64,6 +64,37 @@ pub async fn get_folders_by_user_id(
         .bind(user_id)
         .fetch_all(pool)
         .await
+}
+
+pub async fn get_folder_by_id(pool: &PgPool, folder_id: &Uuid) -> Result<Folder, sqlx::Error> {
+    let query = r#"
+        SELECT id, user_id, name, description, color, created_at, updated_at
+        FROM folders
+        WHERE id = $1
+    "#;
+
+    sqlx::query_as::<_, Folder>(query)
+        .bind(folder_id)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn get_folder_by_id_route(
+    State(data): State<Arc<AppState>>,
+    Path(folder_id): Path<Uuid>,
+) -> impl IntoResponse {
+    tracing::debug!("Getting folder by ID");
+
+    match get_folder_by_id(&data.db, &folder_id).await {
+        Ok(folder) => {
+            let response = Json(folder);
+            response.into_response()
+        }
+        Err(e) => Response::builder()
+            .status(StatusCode::INTERNAL_SERVER_ERROR)
+            .body(Body::from(format!("Error: {}", e)))
+            .unwrap(),
+    }
 }
 
 pub async fn get_folders_by_user_id_route(

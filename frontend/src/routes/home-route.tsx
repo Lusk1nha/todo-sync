@@ -1,14 +1,10 @@
-import { UserMenu } from "@/components/menus/user-menu";
-
 export default function HomeRoute() {
   return (
-    <div className="text-xl font-medium">
-      <div className="w-full bg-background h-24 border-separate border-border border-b flex items-center justify-between px-6">
-        <div>
-          <h4 className="text-foreground text-2xl">Platform Launch</h4>
-        </div>
-
-        <UserMenu />
+    <div className="w-full h-full text-xl font-medium">
+      <div className="h-full flex items-center justify-center p-6">
+        <p className="text-center text-muted-foreground mt-2">
+          Selecione uma das pastas na barra lateral para começar
+        </p>
       </div>
     </div>
   );
