@@ -33,7 +33,7 @@ export function ColumnsFolderRepeater(
 
   return (
     <div className="flex flex-col gap-2">
-      <FormLabel required>Colunas</FormLabel>
+      <FormLabel>Colunas</FormLabel>
 
       <fieldset className="flex flex-col gap-3">
         {fields.map((field, index) => {

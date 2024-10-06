@@ -2,8 +2,6 @@ import { useCallback, useMemo } from "react";
 import { FoldersTitle } from "./folders-title";
 import { Folder } from "@/shared/factories/folders-factory";
 
-import { FolderRender } from "./folder-render";
-
 import {
   getSortedFoldersByDate,
   groupFoldersByDate,
@@ -15,7 +13,9 @@ import { useAtom } from "jotai";
 import { folderSettingsAtom } from "@/shared/atoms";
 import { useQuery } from "@tanstack/react-query";
 import { FoldersService } from "@/shared/services/folders-service";
-import { LoadingSpinner } from "../ui/loading-spinner";
+
+import { ContentFolder } from "./content-folder";
+import { LoadingFolder } from "./loading-folder";
 
 export type FolderSettings = {
   groupBy: FolderGroupBy;
@@ -104,38 +104,5 @@ export function UserFolderRender() {
         <ContentFolder folders={folders} groupFolders={foldersGroupBy} />
       )}
     </section>
-  );
-}
-
-interface IFolderRenderProps {
-  folders: Folder[];
-  groupFolders: Record<string, Folder[]>;
-}
-
-function ContentFolder(props: Readonly<IFolderRenderProps>) {
-  const { folders, groupFolders } = props;
-
-  if (folders.length === 0) {
-    return <EmptyFolder />;
-  }
-
-  return <FolderRender folders={folders} groupFolders={groupFolders} />;
-}
-
-function LoadingFolder() {
-  return (
-    <div className="flex items-center justify-center mt-4">
-      <LoadingSpinner className="w-10 h-10" />
-    </div>
-  );
-}
-
-function EmptyFolder() {
-  return (
-    <div className="flex items-center justify-center mt-4">
-      <p className="text-sm text-muted-foreground">
-        Nenhuma pasta foi encontrada.
-      </p>
-    </div>
   );
 }

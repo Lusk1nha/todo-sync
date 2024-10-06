@@ -30,20 +30,7 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
     defaultValues: {
       name: "",
       description: "",
-      columns: [
-        {
-          name: "Todo",
-          position: 0,
-        },
-        {
-          name: "Doing",
-          position: 1,
-        },
-        {
-          name: "Done",
-          position: 2,
-        },
-      ],
+      columns: [],
       color: "#f97316",
     },
   });
