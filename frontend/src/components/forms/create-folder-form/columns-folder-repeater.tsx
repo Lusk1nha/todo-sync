@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormLabel } from "@/components/ui/form";
+import { ColorPicker } from "@/components/ui/color-picker";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { generateRandomHexColor } from "@/shared/helpers/colors-helper";
 import { FolderSchemaType } from "@/shared/schemas/folder-schema";
 import { Columns, X } from "lucide-react";
 import { Control, useFieldArray } from "react-hook-form";
@@ -21,9 +28,12 @@ export function ColumnsFolderRepeater(
   });
 
   function handleAddNewColumn() {
+    const randomColor = generateRandomHexColor();
+
     append({
       name: "",
       position: fields.length,
+      color: randomColor,
     });
   }
 
@@ -35,49 +45,73 @@ export function ColumnsFolderRepeater(
     <div className="flex flex-col gap-2">
       <FormLabel>Colunas</FormLabel>
 
-      <fieldset className="flex flex-col gap-3">
-        {fields.map((field, index) => {
-          return (
-            <FormField
-              key={field.id}
-              control={control}
-              name={`columns.${index}.name`}
-              render={({ field }) => (
-                <div className="flex flex-col">
-                  <div className="flex gap-2">
-                    <FormControl>
-                      <Input
-                        placeholder="Insira o nome da coluna"
-                        name={field.name}
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                      />
-                    </FormControl>
-
-                    {fields.length > 1 && (
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleRemoveColumn(index)}
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
+      <div className="mt-2">
+        {fields.length === 0 ? (
+          <p className="text-xs text-center text-primary font-medium">
+            Adicione colunas para organizar suas tarefas
+          </p>
+        ) : (
+          <fieldset className="flex flex-col gap-3">
+            {fields.map((field, index) => {
+              return (
+                <FormItem
+                  className="flex items-center space-y-0 gap-2"
+                  key={field.id}
+                >
+                  <FormField
+                    control={control}
+                    name={`columns.${index}.name`}
+                    render={({ field }) => (
+                      <FormControl>
+                        <Input
+                          placeholder="Insira o nome da coluna"
+                          name={field.name}
+                          value={field.value ?? ""}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                        />
+                      </FormControl>
                     )}
-                  </div>
-                </div>
-              )}
-            />
-          );
-        })}
-      </fieldset>
+                  />
+
+                  <FormField
+                    control={control}
+                    name={`columns.${index}.color`}
+                    render={({ field }) => (
+                      <FormControl>
+                        <ColorPicker
+                          className="w-10"
+                          name={field.name}
+                          value={field.value ?? ""}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                        />
+                      </FormControl>
+                    )}
+                  />
+
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="h-9"
+                    onClick={() => handleRemoveColumn(index)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </FormItem>
+              );
+            })}
+          </fieldset>
+        )}
+      </div>
 
       <Button
         type="button"
         size="sm"
         className="gap-2 mt-2"
         variant="outline"
+        disabled={fields.length >= 3}
         onClick={handleAddNewColumn}
       >
         <Columns className="w-4 h-4" />

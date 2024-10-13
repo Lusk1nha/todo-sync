@@ -7,7 +7,7 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use chrono::{DateTime, Utc};
+use chrono;
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
 use uuid::Uuid;
@@ -22,7 +22,6 @@ pub struct Folder {
 
     pub name: String,
     pub description: Option<String>,
-    pub color: String,
 
     pub created_at: chrono::NaiveDateTime,
     pub updated_at: chrono::NaiveDateTime,
@@ -33,21 +32,18 @@ pub struct NewFolder {
     pub user_id: i32,
     pub name: String,
     pub description: Option<String>,
-    pub color: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NewFolderPayload {
     pub name: String,
     pub description: Option<String>,
-    pub color: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateFolder {
     pub name: Option<String>,
     pub description: Option<String>,
-    pub color: Option<String>,
 }
 
 pub async fn get_folders_by_user_id(
@@ -55,7 +51,7 @@ pub async fn get_folders_by_user_id(
     user_id: &i32,
 ) -> Result<Vec<Folder>, sqlx::Error> {
     let query = r#"
-        SELECT id, user_id, name, description, color, created_at, updated_at
+        SELECT id, user_id, name, description, created_at, updated_at
         FROM folders
         WHERE user_id = $1
     "#;
@@ -68,7 +64,7 @@ pub async fn get_folders_by_user_id(
 
 pub async fn get_folder_by_id(pool: &PgPool, folder_id: &Uuid) -> Result<Folder, sqlx::Error> {
     let query = r#"
-        SELECT id, user_id, name, description, color, created_at, updated_at
+        SELECT id, user_id, name, description, created_at, updated_at
         FROM folders
         WHERE id = $1
     "#;
@@ -149,9 +145,9 @@ pub async fn get_folders_by_user_id_route(
 
 pub async fn create_folder(pool: &PgPool, new_folder: &NewFolder) -> Result<Folder, sqlx::Error> {
     let query = r#"
-        INSERT INTO folders (id, user_id, name, description, color)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, user_id, name, description, color, created_at, updated_at
+        INSERT INTO folders (id, user_id, name, description)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id, user_id, name, description, created_at, updated_at
     "#;
 
     sqlx::query_as::<_, Folder>(query)
@@ -159,7 +155,6 @@ pub async fn create_folder(pool: &PgPool, new_folder: &NewFolder) -> Result<Fold
         .bind(&new_folder.user_id)
         .bind(&new_folder.name)
         .bind(&new_folder.description)
-        .bind(&new_folder.color)
         .fetch_one(pool)
         .await
 }
@@ -185,7 +180,6 @@ pub async fn create_folder_route(
         user_id,
         name: payload.name.clone(),
         description: payload.description.clone(),
-        color: payload.color.clone(),
     };
 
     create_folder(&data.db, &new_folder)

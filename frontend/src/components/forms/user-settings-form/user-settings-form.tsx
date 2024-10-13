@@ -171,7 +171,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
             </Link>
           )}
 
-          <Button type="submit" disabled={isSubmitting || !isValid}>
+          <Button className="w-full" type="submit" disabled={isSubmitting || !isValid}>
             {defaultValues
               ? "Atualizar configurações"
               : "Estou pronto para começar!"}

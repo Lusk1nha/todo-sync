@@ -10,11 +10,11 @@ interface IGetFolderColumnsProps {
 
 export function GetFolderColumns(props: Readonly<IGetFolderColumnsProps>) {
   const { folderId } = props;
-  const { folderColumns } = useFolderColumns(folderId);
+  const { folderColumns, isLoading } = useFolderColumns(folderId);
 
-  if (folderColumns.length === 0) {
+  if (folderColumns.length === 0 && !isLoading) {
     return <EmptyFolderColumns folderId={folderId} />;
   }
 
-  return <RenderFolderColumns columns={folderColumns} />;
+  return <RenderFolderColumns folderId={folderId} columns={folderColumns} />;
 }

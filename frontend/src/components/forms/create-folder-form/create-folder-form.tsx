@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ColumnsFolderRepeater } from "./columns-folder-repeater";
 
+import { RenderErrorList } from "../utilities/render-error-list";
+
 interface ICreateFolderFormProps {
   onSubmit: (data: FolderSchemaType) => void;
 }
@@ -31,16 +33,15 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
       name: "",
       description: "",
       columns: [],
-      color: "#f97316",
     },
   });
 
   const { control, handleSubmit, formState } = form;
-  const { isValid, isSubmitting } = formState;
+  const { isValid, isSubmitting, errors } = formState;
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <FieldGroup>
           <FormField
             control={control}
@@ -103,6 +104,8 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
         >
           Criar pasta
         </Button>
+
+        <RenderErrorList errors={errors} />
       </form>
     </Form>
   );

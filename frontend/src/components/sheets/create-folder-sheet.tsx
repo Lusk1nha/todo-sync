@@ -68,19 +68,22 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
     const payload = {
       name: data.name,
       description: data.description,
-      color: data.color,
     } as ICreateFolderRequest;
 
     const folder = await create(payload);
-    const columns = data.columns.map((column, index) =>
-      createColumn({
-        name: column.name,
-        position: index,
-        folder_id: folder.id,
-      })
-    );
 
-    await Promise.all(columns);
+    if (data.columns.length >= 1) {
+      const columns = data.columns.map((column, index) =>
+        createColumn({
+          name: column.name,
+          position: index,
+          folder_id: folder.id,
+          color: column.color,
+        })
+      );
+
+      await Promise.all(columns);
+    }
 
     return folder;
   }
@@ -108,12 +111,13 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="w-[400px] sm:w-[540px]"
+        className="h-full overflow-auto"
       >
         <SheetHeader>
           <SheetTitle>Criar nova pasta</SheetTitle>
         </SheetHeader>
-        <div className="w-full h-full mt-8">
+
+        <div className="w-full h-full flex flex-col py-4">
           <CreateFolderForm onSubmit={mutate} />
         </div>
       </SheetContent>

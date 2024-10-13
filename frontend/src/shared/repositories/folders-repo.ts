@@ -6,7 +6,6 @@ export interface IFolderResponse {
   id: string;
   name: string;
   description: string | null | undefined;
-  color: string;
   user_id: number;
   created_at: string;
   updated_at: string;
@@ -15,7 +14,6 @@ export interface IFolderResponse {
 export interface ICreateFolderRequest {
   name: string;
   description: string;
-  color: string;
 }
 
 export class FoldersRepo {

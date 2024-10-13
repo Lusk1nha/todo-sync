@@ -2,6 +2,7 @@ import { UserMenu } from "@/components/menus/user-menu";
 import { GetFolderColumns } from "@/components/folder-columns/get-folder-columns";
 
 import { Folder } from "@/shared/factories/folders-factory";
+import { FolderMenu } from "@/components/menus/folder-menu";
 
 interface FolderRouteProps {
   folder: Folder;
@@ -16,7 +17,11 @@ export function FolderRoute(props: Readonly<FolderRouteProps>) {
         <div>
           <h4 className="text-foreground text-xl">{folder.name}</h4>
         </div>
-        <UserMenu />
+
+        <div className="flex items-center gap-2">
+          <FolderMenu folder={folder} />
+          <UserMenu />
+        </div>
       </div>
 
       <GetFolderColumns folderId={folder.id} />

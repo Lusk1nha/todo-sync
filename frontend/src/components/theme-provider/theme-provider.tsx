@@ -50,6 +50,8 @@ export function ThemeProvider(props: Readonly<ThemeProviderProps>) {
         : "light";
 
       root.classList.add(systemTheme);
+      setTheme(systemTheme);
+
       return;
     }
 

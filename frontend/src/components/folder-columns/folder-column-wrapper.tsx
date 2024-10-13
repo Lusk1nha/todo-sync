@@ -3,13 +3,12 @@ import { motion } from "framer-motion";
 
 interface IFolderColumnWrapperProps {
   column: FolderColumn;
-  color?: string | null;
 }
 
 export function FolderColumnWrapper(
   props: Readonly<IFolderColumnWrapperProps>
 ) {
-  const { column, color = "#f97316" } = props;
+  const { column } = props;
 
   return (
     <motion.div
@@ -22,13 +21,13 @@ export function FolderColumnWrapper(
           opacity: 1,
         },
       }}
-      className="min-w-[240px] flex flex-col gap-6"
+      className="min-w-[280px] flex flex-col gap-6"
     >
       <div className="flex items-center gap-3">
         <div
           className={"bg-primary w-4 h-4 rounded-full"}
           style={{
-            backgroundColor: color ?? "#f97316",
+            backgroundColor: column.color,
           }}
         />
         <h2 className="text-muted-foreground text-sm font-medium uppercase tracking-[2.4px]">

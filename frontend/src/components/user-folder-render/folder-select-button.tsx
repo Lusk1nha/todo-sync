@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Folder } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { generateFolderRedirect } from "@/shared/helpers/folders-helper";
+import { cn } from "@/lib/utils";
+import { FolderPageParams } from "@/shared/types";
 
 interface IFolderSelectButtonProps {
   id: string;
@@ -13,6 +15,9 @@ interface IFolderSelectButtonProps {
 
 export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
   const { id, text, description } = props;
+  const { folderId } = useParams<FolderPageParams>();
+
+  const isActiveFolder = folderId === id;
 
   return (
     <Link to={generateFolderRedirect(id)}>
@@ -27,7 +32,10 @@ export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
             opacity: 1,
           },
         }}
-        className="group w-full flex min-h-10 h-10 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-primary hover:text-white transition-all duration-100"
+        className={cn(
+          "group w-full flex min-h-10 h-10 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-primary hover:text-secondary transition-all duration-100",
+          isActiveFolder && "bg-foreground text-secondary"
+        )}
       >
         <button
           type="button"

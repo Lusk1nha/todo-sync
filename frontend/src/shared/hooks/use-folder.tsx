@@ -19,6 +19,7 @@ export function useFolder(folderId?: string): UseFolderResponse {
       }
 
       const response = get(folderId);
+
       return response;
     },
     enabled: !!folderId,

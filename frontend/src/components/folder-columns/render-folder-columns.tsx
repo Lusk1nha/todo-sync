@@ -3,14 +3,17 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { FolderColumnWrapper } from "./folder-column-wrapper";
 
+import { CreateFolderColumnDialog } from "../dialogs/create-folder-column-dialog";
+
 interface IRenderFolderColumnsProps {
+  folderId: string;
   columns: FolderColumn[];
 }
 
 export function RenderFolderColumns(
   props: Readonly<IRenderFolderColumnsProps>
 ) {
-  const { columns } = props;
+  const { folderId, columns } = props;
 
   return (
     <ScrollArea className="h-full whitespace-nowrap rounded-md mb-1">
@@ -31,6 +34,8 @@ export function RenderFolderColumns(
           {columns.map((column) => (
             <FolderColumnWrapper key={column.id} column={column} />
           ))}
+
+          <CreateFolderColumnDialog folderId={folderId} variant="full" />
         </motion.div>
       </AnimatePresence>
 
