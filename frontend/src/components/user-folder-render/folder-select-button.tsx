@@ -33,8 +33,8 @@ export function FolderSelectButton(props: Readonly<IFolderSelectButtonProps>) {
           },
         }}
         className={cn(
-          "group w-full flex min-h-10 h-10 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-primary hover:text-secondary transition-all duration-100",
-          isActiveFolder && "bg-foreground text-secondary"
+          "group w-full flex min-h-10 h-10 rounded-r-3xl px-9 text-muted-foreground text-sm hover:bg-foreground hover:text-secondary transition-all duration-100",
+          isActiveFolder && "bg-primary text-secondary"
         )}
       >
         <button
