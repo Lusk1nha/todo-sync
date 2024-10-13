@@ -10,7 +10,7 @@ export default function AuthRoute() {
   }
 
   return (
-    <div id="authentication-page" className="w-full h-full flex flex-col p-6">
+    <div id="authentication-page" className="w-full h-screen flex flex-1 flex-col p-6">
       <div className="px-6">
         <ThemeButton />
       </div>

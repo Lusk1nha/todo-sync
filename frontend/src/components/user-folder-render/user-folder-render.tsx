@@ -1,52 +1,108 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { FolderSelectButton } from "./folder-select-button";
-import { CreateFolderButton } from "./create-folder-button";
-import { FolderSheet } from "../sheets/folder-sheet";
-import { useState } from "react";
+import { useCallback, useMemo } from "react";
+import { FoldersTitle } from "./folders-title";
+import { Folder } from "@/shared/factories/folders-factory";
+
+import {
+  getSortedFoldersByDate,
+  groupFoldersByDate,
+  getSortedFoldersByName,
+  groupFoldersByFirstLetter,
+} from "@/shared/helpers/folders-helper";
+
+import { useAtom } from "jotai";
+import { folderSettingsAtom } from "@/shared/atoms";
+import { useQuery } from "@tanstack/react-query";
+import { FoldersService } from "@/shared/services/folders-service";
+
+import { ContentFolder } from "./content-folder";
+import { LoadingFolder } from "./loading-folder";
+
+export type FolderSettings = {
+  groupBy: FolderGroupBy;
+  sortDirection: FolderSortDirection;
+};
+
+export type FolderGroupBy = "date" | "first-letter" | "none";
+export type FolderSortDirection = "asc" | "desc";
 
 export function UserFolderRender() {
-  const [open, setOpen] = useState(false);
+  const [settings, setSettings] = useAtom(folderSettingsAtom);
+  const { groupBy, sortDirection } = settings;
 
-  const sets = [
-    "Inbox",
-    "Today",
-    "Next 7 Days",
-    "Projects",
-    "Tags",
-    "Filters",
-    "Archive",
-    "Trash",
-  ];
+  const { list } = new FoldersService();
+
+  const {
+    data: response,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["folders"],
+    queryFn: getFolders,
+
+    initialData: [],
+
+    refetchOnWindowFocus: false,
+  });
+
+  async function getFolders(): Promise<Folder[]> {
+    const folders = await list();
+    return folders;
+  }
+
+  const folders: Folder[] = useMemo(() => {
+    const sorted = getSortedFoldersByName(response, sortDirection);
+    return sorted;
+  }, [response, sortDirection]);
+
+  const foldersGroupBy: Record<string, Folder[]> | null = useMemo(() => {
+    if (groupBy === "date") {
+      const sortedFolders = getSortedFoldersByDate(
+        folders,
+        "updated_at",
+        sortDirection
+      );
+
+      return groupFoldersByDate(sortedFolders);
+    }
+
+    if (groupBy === "first-letter") {
+      const sortedFolders = getSortedFoldersByName(folders, sortDirection);
+      return groupFoldersByFirstLetter(sortedFolders);
+    }
+
+    return {} as Record<string, Folder[]>;
+  }, [folders, sortDirection, groupBy]);
+
+  const handleGroupByChange = useCallback(
+    (groupBy: FolderGroupBy) => {
+      localStorage.setItem("todo-sync:group-by", groupBy);
+      setSettings({ ...settings, groupBy });
+    },
+    [settings, setSettings]
+  );
+
+  const handleSortDirectionChange = useCallback(
+    (sort: FolderSortDirection) => {
+      localStorage.setItem("todo-sync:sort-direction", sort);
+      setSettings({ ...settings, sortDirection: sort });
+    },
+    [settings, setSettings]
+  );
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-xs tracking-widest text-muted-foreground uppercase px-9">
-        Pastas (8)
-      </h2>
+      <FoldersTitle
+        count={folders.length}
+        onRefresh={refetch}
+        setGroupBy={handleGroupByChange}
+        setSortDirection={handleSortDirectionChange}
+      />
 
-      <AnimatePresence>
-        <motion.ul
-          variants={{
-            visible: {
-              transition: {
-                delayChildren: 0.2,
-                staggerChildren: 0.05,
-              },
-            },
-          }}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col pr-6"
-        >
-          {sets.map((set) => (
-            <FolderSelectButton key={set} text={set} />
-          ))}
-
-          <CreateFolderButton onClick={() => setOpen((prev) => !prev)} />
-        </motion.ul>
-      </AnimatePresence>
-
-      <FolderSheet open={open} setOpen={setOpen} />
+      {isFetching ? (
+        <LoadingFolder />
+      ) : (
+        <ContentFolder folders={folders} groupFolders={foldersGroupBy} />
+      )}
     </section>
   );
 }

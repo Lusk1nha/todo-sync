@@ -123,7 +123,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                   <UploadAvatar
                     name={name}
                     onChange={onChange}
-                    value={value as any}
+                    value={value as File}
                     onBlur={onBlur}
                     dragAndDropStrings={{
                       dragAndDrop: "Arraste e solte ou clique para procurar",

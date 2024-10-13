@@ -10,14 +10,12 @@ export function MainContentRoute() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col sm:flex-row">
-      <header>
+    <div className="w-full h-screen flex">
+      <header className="flex">
         <Navbar />
       </header>
 
-      <main className="bg-secondary w-full h-full">
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }

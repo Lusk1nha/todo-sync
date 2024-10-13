@@ -18,7 +18,7 @@ export interface IUpdateSettings {
 }
 
 export class UsersProfilesRepo {
-  private _API_URL = "http://localhost:3000/api/users";
+  private readonly _API_URL = "http://localhost:3000/api/users";
 
   async getCurrentUserProfile(): Promise<IUserProfileResponse> {
     const endpoint = `${this._API_URL}/current-user`;
