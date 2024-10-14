@@ -12,6 +12,8 @@ interface IFolderMenuProps {
 export function FolderMenu(props: Readonly<IFolderMenuProps>) {
   const { folder } = props;
 
+  console.log(folder);
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
