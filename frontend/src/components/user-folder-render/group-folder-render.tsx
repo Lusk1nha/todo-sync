@@ -14,7 +14,7 @@ export function GroupFolderRender(props: Readonly<IGroupFolderRenderProps>) {
   return (
     <AnimatePresence>
       <motion.div
-        className="flex flex-col gap-4 pr-6 overflow-y-auto mr-6"
+        className="max-h-[500px] flex flex-col gap-4 pr-6 overflow-y-auto mr-6"
         variants={{
           visible: {
             transition: {

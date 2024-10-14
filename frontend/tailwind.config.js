@@ -21,6 +21,11 @@ module.exports = {
         sans: ["Inter", "sans-serif"],
       },
       colors: {
+        gradient: {
+          DEFAULT: "var(--gradient)",
+          left: "hsl(var(--gradient-left))",
+          right: "hsl(var(--gradient-right))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

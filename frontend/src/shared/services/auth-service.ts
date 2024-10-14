@@ -9,7 +9,7 @@ import { Auth } from "../factories/auth-factory";
 import { clearTokenAuthorization } from "../helpers/cookies-helper";
 
 export class AuthService implements AuthModel {
-  private _repository: AuthRepo;
+  private readonly _repository: AuthRepo;
 
   constructor() {
     this._repository = new AuthRepo();
@@ -41,7 +41,10 @@ export class AuthService implements AuthModel {
   }
 
   async logout(): Promise<void> {
-    await clearTokenAuthorization();
-    await this._repository.logout();
+    try {
+      await this._repository.logout();
+    } finally {
+      await clearTokenAuthorization();
+    }
   }
 }

@@ -89,10 +89,10 @@ pub async fn get_current_user(
 
     match get_user_profile_by_id(&data.db, &user_id).await {
         Ok(profile) => match profile {
-            Some(profile) => Response::builder()
-                .status(StatusCode::OK)
-                .body(Body::from(serde_json::to_string(&profile).unwrap()))
-                .unwrap(),
+            Some(profile) => {
+                let response = Json(profile);
+                response.into_response()
+            },
             None => Response::builder()
                 .status(StatusCode::ACCEPTED)
                 .body(Body::empty())

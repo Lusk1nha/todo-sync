@@ -23,7 +23,7 @@ export function FolderLinearRender(props: Readonly<IFolderLinearRenderProps>) {
         initial="hidden"
         animate="visible"
       >
-        <motion.ul className="flex flex-col pr-6 overflow-y-auto mr-6">
+        <motion.ul className="max-h-[500px] flex flex-col pr-6 overflow-y-auto mr-6">
           {folders.map((set) => (
             <FolderSelectButton
               key={set.id}

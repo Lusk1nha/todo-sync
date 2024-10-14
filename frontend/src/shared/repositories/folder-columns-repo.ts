@@ -6,6 +6,7 @@ export interface IFolderColumnsResponse {
   folder_id: string;
   name: string;
   position: number;
+  color: string;
   created_at: string;
   updated_at: string;
 }
@@ -14,6 +15,7 @@ export interface ICreateFolderColumnRequest {
   folder_id: string;
   name: string;
   position: number;
+  color: string;
 }
 
 export class FolderColumnsRepo {

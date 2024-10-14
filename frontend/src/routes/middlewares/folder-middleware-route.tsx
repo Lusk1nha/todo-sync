@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import { FolderRoute } from "../folder-route";
 
 import { FolderX } from "lucide-react";
-
-type FolderPageParams = {
-  folderId: string;
-};
+import { FolderPageParams } from "@/shared/types";
 
 export function FolderMiddlewareRoute() {
   const { folderId } = useParams<FolderPageParams>();

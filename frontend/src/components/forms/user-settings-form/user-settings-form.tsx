@@ -23,7 +23,7 @@ import { BIRTHDAY_MAX_DATE, BIRTHDAY_MIN_DATE } from "@/shared/constants";
 import { UserProfile } from "@/shared/factories/user-profile-factory";
 import { Link } from "react-router-dom";
 import { RoutesEnum } from "@/shared/enums/routes-enum";
-import { Home } from "lucide-react";
+import { Home, Save } from "lucide-react";
 
 interface IUsersSettingsFormProps {
   onSubmit: (data: UsersSettingsSchemaType) => void;
@@ -171,7 +171,8 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
             </Link>
           )}
 
-          <Button type="submit" disabled={isSubmitting || !isValid}>
+          <Button className="gap-2" type="submit" disabled={isSubmitting || !isValid}>
+            <Save className="w-4 h-4" />
             {defaultValues
               ? "Atualizar configurações"
               : "Estou pronto para começar!"}

@@ -4,6 +4,7 @@ CREATE TABLE folder_columns (
   folder_id UUID REFERENCES folders(id) ON DELETE CASCADE,
   name VARCHAR(50) NOT NULL,
   position INT,
+  color VARCHAR(7),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (name, folder_id)

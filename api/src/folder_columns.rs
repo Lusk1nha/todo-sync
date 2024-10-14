@@ -19,15 +19,18 @@ pub struct FolderColumn {
     pub folder_id: Uuid,
     pub name: String,
     pub position: i32,
+    pub color: String,
     pub created_at: chrono::NaiveDateTime,
     pub updated_at: chrono::NaiveDateTime,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NewFolderColumn {
     pub id: Uuid,
     pub folder_id: Uuid,
     pub name: String,
     pub position: i32,
+    pub color: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -35,6 +38,7 @@ pub struct NewFolderColumnPayload {
     pub folder_id: Uuid,
     pub name: String,
     pub position: i32,
+    pub color: String,
 }
 
 pub async fn get_columns_by_folder(
@@ -42,7 +46,7 @@ pub async fn get_columns_by_folder(
     folder_id: &Uuid,
 ) -> Result<Vec<FolderColumn>, sqlx::Error> {
     let query = r#"
-    SELECT id, folder_id, name, position, created_at, updated_at
+    SELECT id, folder_id, name, position, color, created_at, updated_at
     FROM folder_columns
     WHERE folder_id = $1
   "#;
@@ -76,9 +80,9 @@ pub async fn create_folder_column(
     new_folder_column: &NewFolderColumn,
 ) -> Result<FolderColumn, sqlx::Error> {
     let query = r#"
-    INSERT INTO folder_columns (id, folder_id, name, position)
-    VALUES ($1, $2, $3, $4)
-    RETURNING id, folder_id, name, position, created_at, updated_at
+    INSERT INTO folder_columns (id, folder_id, name, position, color)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING id, folder_id, name, position, created_at, updated_at, color
   "#;
 
     let new_folder_column = sqlx::query_as::<_, FolderColumn>(query)
@@ -86,6 +90,7 @@ pub async fn create_folder_column(
         .bind(new_folder_column.folder_id)
         .bind(new_folder_column.name.clone())
         .bind(new_folder_column.position)
+        .bind(new_folder_column.color.clone())
         .fetch_one(pool)
         .await?;
 
@@ -101,7 +106,10 @@ pub async fn create_folder_column_route(
         folder_id: new_folder_column.folder_id,
         name: new_folder_column.name.clone(),
         position: new_folder_column.position,
+        color: new_folder_column.color.clone(),
     };
+
+    tracing::debug!("New folder column: {:?}", new_folder_column);
 
     match create_folder_column(&data.db, &new_folder_column).await {
         Ok(folder_column) => {

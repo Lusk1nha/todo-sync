@@ -6,7 +6,14 @@ import {
   FolderSortDirection,
 } from "@/components/user-folder-render/user-folder-render";
 
+export const sidebarAtom = atom<boolean>(
+  localStorage.getItem("todo-sync:is-sidebar-open")
+    ? localStorage.getItem("todo-sync:is-sidebar-open") === "true"
+    : true
+);
+
 export const profileAtom = atom<UserProfile | null>(null);
+
 export const folderSettingsAtom = atom<FolderSettings>({
   groupBy: (localStorage.getItem("todo-sync:group-by") ??
     "date") as FolderGroupBy,
