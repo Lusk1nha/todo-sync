@@ -21,7 +21,7 @@ export function DesktopNavbar() {
         )}
       >
         <nav className="min-w-[300px] w-[300px] h-full flex flex-col">
-          <div className="w-full h-24 flex py-6 px-9">
+          <div className="w-full min-h-24 flex px-6">
             <LogoMark className="text-xl md:text-2xl" />
           </div>
 

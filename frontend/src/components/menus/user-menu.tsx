@@ -29,7 +29,7 @@ export function UserMenu() {
       </PopoverTrigger>
       <PopoverContent className="w-52 flex flex-col gap-2">
         <div>
-          <h2 className="text-base">Perfil</h2>
+          <h2 className="text-sm font-medium">Perfil</h2>
           <p className="text-xs text-primary">Ver e editar perfil de usuário</p>
         </div>
 

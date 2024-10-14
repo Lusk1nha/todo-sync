@@ -22,7 +22,7 @@ export function ShowAsideButton() {
           <Eye className="w-5 h-5" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>Clique aqui para mostrar barra lateral</TooltipContent>
+      <TooltipContent side="right">Clique aqui para mostrar barra lateral</TooltipContent>
     </Tooltip>
   );
 }
