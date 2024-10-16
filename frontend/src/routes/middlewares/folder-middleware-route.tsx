@@ -25,9 +25,11 @@ export function FolderMiddlewareRoute() {
       <div className="w-full h-full flex items-center justify-center">
         <div className="flex flex-col gap-2 items-center">
           <FolderX className="text-destructive w-20 h-20 md:w-32 md:h-32" />
+
           <h1 className="text-xl md:text-2xl font-medium text-center mt-4">
             Pasta não encontrada
           </h1>
+
           <p className="text-xs md:text-base text-center text-muted-foreground">
             A pasta que você está procurando não existe ou você não tem
             permissão. <br />

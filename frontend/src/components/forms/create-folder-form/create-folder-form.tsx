@@ -10,7 +10,11 @@ import {
 import { useForm } from "react-hook-form";
 import { FieldGroup } from "../utilities/field-group";
 import { Input } from "@/components/ui/input";
-import { FolderSchema, FolderSchemaType } from "@/shared/schemas/folder-schema";
+import {
+  FolderColumnSchemaType,
+  FolderSchema,
+  FolderSchemaType,
+} from "@/shared/schemas/folder-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
@@ -18,26 +22,57 @@ import { Textarea } from "@/components/ui/textarea";
 import { ColumnsFolderRepeater } from "./columns-folder-repeater";
 
 import { RenderErrorList } from "../utilities/render-error-list";
+import { Folder } from "@/shared/factories/folders-factory";
 
+type CreateFolderFormStrings = {
+  save?: string;
+};
 interface ICreateFolderFormProps {
   onSubmit: (data: FolderSchemaType) => void;
+  defaultValues?: Folder;
+
+  strings?: CreateFolderFormStrings;
 }
 
 export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
-  const { onSubmit } = props;
+  const {
+    onSubmit,
+    defaultValues,
+    strings = {
+      save: "Criar pasta",
+    },
+  } = props;
 
   const form = useForm<FolderSchemaType>({
     resolver: zodResolver(FolderSchema),
     mode: "onChange",
-    defaultValues: {
-      name: "",
-      description: "",
-      columns: [],
-    },
+    defaultValues: getDefaultValues(defaultValues),
   });
 
   const { control, handleSubmit, formState } = form;
   const { isValid, isSubmitting, errors } = formState;
+
+  function getDefaultValues(folder?: Folder): FolderSchemaType {
+    if (!folder) {
+      return {
+        name: "",
+        description: "",
+        columns: [],
+      };
+    }
+
+    const columns: FolderColumnSchemaType[] = folder.columns.map((column) => ({
+      name: column.name,
+      position: column.position,
+      color: column.color,
+    }));
+
+    return {
+      name: folder.name,
+      description: folder?.description ?? "",
+      columns,
+    };
+  }
 
   return (
     <Form {...form}>
@@ -102,7 +137,7 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
           className="w-full mt-6"
           disabled={!isValid || isSubmitting}
         >
-          Criar pasta
+          {strings.save}
         </Button>
 
         <RenderErrorList errors={errors} />

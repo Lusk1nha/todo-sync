@@ -10,10 +10,11 @@ type IAnimatedCounterProps = {
   from: number;
   to: number;
   animationOptions?: KeyframeOptions;
+  duration?: number;
 };
 
 export function AnimatedCounter(props: Readonly<IAnimatedCounterProps>) {
-  const { from, to, animationOptions } = props;
+  const { from, to, animationOptions, duration = 2 } = props;
 
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
@@ -32,7 +33,7 @@ export function AnimatedCounter(props: Readonly<IAnimatedCounterProps>) {
     }
 
     const controls = animate(from, to, {
-      duration: 2,
+      duration,
       ease: "easeOut",
       ...animationOptions,
       onUpdate(value) {

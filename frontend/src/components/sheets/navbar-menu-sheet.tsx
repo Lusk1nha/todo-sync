@@ -24,6 +24,7 @@ export function NavbarMenuSheet(props: Readonly<IMobileNavbarProps>) {
           <Menu className="w-4 h-4" />
         </Button>
       </SheetTrigger>
+
       <SheetContent side="left">
         <LogoMark className="text-xl md:text-2xl" />
         <div className="flex flex-col gap-1 pt-4">

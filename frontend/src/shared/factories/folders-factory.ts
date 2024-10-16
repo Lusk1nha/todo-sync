@@ -1,4 +1,5 @@
 import { IFolderResponse } from "../repositories/folders-repo";
+import { FolderColumn } from "./folders-columns-factory";
 
 export class Folder {
   private readonly _id: string;
@@ -8,6 +9,8 @@ export class Folder {
   private readonly _user_id: number;
   private readonly _created_at: Date;
   private readonly _updated_at: Date;
+
+  private _columns: FolderColumn[] | null;
 
   constructor(data: IFolderResponse) {
     if (!data.id) {
@@ -21,6 +24,8 @@ export class Folder {
     this._user_id = data.user_id;
     this._created_at = new Date(data.created_at);
     this._updated_at = new Date(data.updated_at);
+
+    this._columns = null;
   }
 
   get id(): string {
@@ -45,5 +50,13 @@ export class Folder {
 
   get updated_at(): Date {
     return this._updated_at;
+  }
+
+  get columns(): FolderColumn[] {
+    return this._columns ?? [];
+  }
+
+  public defineColumns(columns: FolderColumn[]) {
+    this._columns = columns;
   }
 }
