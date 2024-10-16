@@ -1,5 +1,5 @@
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { EllipsisVertical, FolderX } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Folder } from "@/shared/factories/folders-factory";
