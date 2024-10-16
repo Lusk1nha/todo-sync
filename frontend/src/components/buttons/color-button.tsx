@@ -1,3 +1,4 @@
+import { ColorToast } from "../toasts";
 import { Badge } from "../ui/badge";
 import { useToast } from "../ui/use-toast";
 
@@ -14,19 +15,7 @@ export function ColorButton(props: Readonly<IColorButtonProps>) {
     toast({
       title: "Cor copiada",
       variant: "default",
-      description: (
-        <p>
-          Cor{" "}
-          <span
-            style={{
-              color: color,
-            }}
-          >
-            {color}
-          </span>{" "}
-          copiada para área de transferência
-        </p>
-      ),
+      description: <ColorToast color={color} />,
     });
 
     navigator.clipboard.writeText(color);

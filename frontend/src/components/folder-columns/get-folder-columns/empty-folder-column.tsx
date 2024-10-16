@@ -1,4 +1,4 @@
-import { CreateFolderColumnDialog } from "../dialogs/create-folder-column-dialog";
+import { CreateFolderColumnDialog } from "../../dialogs/create-folder-column-dialog";
 
 interface IEmptyFolderColumnsProps {
   folderId: string;
@@ -6,6 +6,7 @@ interface IEmptyFolderColumnsProps {
 
 export function EmptyFolderColumns(props: Readonly<IEmptyFolderColumnsProps>) {
   const { folderId } = props;
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-2">
       <h1 className="text-center text-secondary-foreground text-lg font-medium">

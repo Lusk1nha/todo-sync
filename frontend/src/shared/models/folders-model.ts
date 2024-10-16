@@ -5,6 +5,6 @@ import { ICreateFolderRequest } from "../repositories/folders-repo";
 export abstract class FoldersModel {
   abstract get(folderId: string): Promise<Folder>;
   abstract list(): Promise<Folder[]>;
-  abstract columns(folderId: string): Promise<FolderColumn[]>;
+  abstract getColumns(folderId: string): Promise<FolderColumn[]>;
   abstract create(data: ICreateFolderRequest): Promise<Folder>;
 }

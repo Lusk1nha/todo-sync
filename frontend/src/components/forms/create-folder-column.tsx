@@ -37,7 +37,7 @@ export function CreateFolderColumnForm(
     resolver: zodResolver(FolderColumnSchema),
     defaultValues: {
       name: "",
-      position: null,
+      position: 0,
       color: generateRandomHexColor(),
     },
   });

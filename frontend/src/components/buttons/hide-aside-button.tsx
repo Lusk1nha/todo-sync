@@ -43,7 +43,7 @@ export function HideAsideButton(props: Readonly<IHideAsideButtonProps>) {
           {strings.text}
         </Button>
       </TooltipTrigger>
-      <TooltipContent>{strings.tooltip}</TooltipContent>
+      <TooltipContent side="right">{strings.tooltip}</TooltipContent>
     </Tooltip>
   );
 }

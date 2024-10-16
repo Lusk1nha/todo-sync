@@ -6,16 +6,17 @@ interface UseFolderColumns {
   folderColumns: FolderColumn[];
   isLoading: boolean;
   isError: boolean;
+  error: Error | null;
 }
 
 export function useFolderColumns(folderId: string): UseFolderColumns {
-  const { columns } = new FoldersService();
+  const { getColumns } = new FoldersService();
 
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data, isLoading, isFetching, isError, error } = useQuery({
     queryKey: ["folderColumns", folderId],
     queryFn: async () => {
-      const response = columns(folderId);
-      return response;
+      const columns = getColumns(folderId);
+      return columns;
     },
     initialData: [] as FolderColumn[],
     refetchOnWindowFocus: false,
@@ -25,5 +26,6 @@ export function useFolderColumns(folderId: string): UseFolderColumns {
     folderColumns: data,
     isLoading: isLoading || isFetching,
     isError,
+    error,
   };
 }

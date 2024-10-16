@@ -6,7 +6,7 @@ export const useSidebar = () => {
   const [open, setOpen] = useAtom<boolean>(sidebarAtom);
 
   useEffect(() => {
-    localStorage.setItem("todo-sync:is-sidebar-open", String(open));
+    sessionStorage.setItem("todo-sync:is-sidebar-open", String(open));
   }, [open]);
 
   return {

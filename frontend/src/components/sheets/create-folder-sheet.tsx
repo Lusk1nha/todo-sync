@@ -1,6 +1,6 @@
 import { FolderPlus } from "lucide-react";
 import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "../ui/sheet";
 import { useState } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -111,10 +111,13 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="h-full overflow-auto"
+        className="sm:max-w-[600px] w-[600px] h-full overflow-auto"
       >
         <SheetHeader>
           <SheetTitle>Criar nova pasta</SheetTitle>
+          <SheetDescription>
+            Preencha os campos abaixo para criar uma nova pasta
+          </SheetDescription>
         </SheetHeader>
 
         <div className="w-full h-full flex flex-col py-4">

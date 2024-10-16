@@ -14,7 +14,7 @@ export class FoldersService implements FoldersModel {
 
     this.list = this.list.bind(this);
     this.get = this.get.bind(this);
-    this.columns = this.columns.bind(this);
+    this.getColumns = this.getColumns.bind(this);
     this.create = this.create.bind(this);
   }
 
@@ -23,7 +23,7 @@ export class FoldersService implements FoldersModel {
     return new Folder(response);
   }
 
-  async columns(folderId: string): Promise<FolderColumn[]> {
+  async getColumns(folderId: string): Promise<FolderColumn[]> {
     const response = await this._repository.getColumns(folderId);
     const folderColumns = response.map(
       (folderColumn) => new FolderColumn(folderColumn)

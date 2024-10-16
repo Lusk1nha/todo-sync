@@ -7,8 +7,8 @@ import {
 } from "@/components/user-folder-render/user-folder-render";
 
 export const sidebarAtom = atom<boolean>(
-  localStorage.getItem("todo-sync:is-sidebar-open")
-    ? localStorage.getItem("todo-sync:is-sidebar-open") === "true"
+  sessionStorage.getItem("todo-sync:is-sidebar-open")
+    ? sessionStorage.getItem("todo-sync:is-sidebar-open") === "true"
     : true
 );
 

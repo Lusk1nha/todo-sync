@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { CreateFolderColumnForm } from "../forms/create-folder-column";
 import { FolderColumnSchemaType } from "@/shared/schemas/folder-schema";
@@ -10,6 +10,7 @@ import { FolderColumnsService } from "@/shared/services/folder-columns-service";
 import { FoldersService } from "@/shared/services/folders-service";
 import { ICreateFolderColumnRequest } from "@/shared/repositories/folder-columns-repo";
 import { AddNewFolderColumn } from "../folder-columns/add-new-folder-column";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 type CreateFolderColumnDialogVariant = "default" | "full";
 
@@ -71,9 +72,9 @@ export function CreateFolderColumnDialog(
 
   async function handleCreateColumn(data: FolderColumnSchemaType) {
     const { create } = new FolderColumnsService();
-    const { columns } = new FoldersService();
+    const { getColumns } = new FoldersService();
 
-    const folderColumns = await columns(folderId);
+    const folderColumns = await getColumns(folderId);
     const latestPosition = folderColumns.reduce((acc, column) => {
       return column.position > acc ? column.position : acc;
     }, 0);
@@ -122,7 +123,13 @@ export function CreateFolderColumnDialog(
       {handleVariant(variant)}
 
       <DialogContent>
-        <DialogTitle>{strings.title}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>{strings.title}</DialogTitle>
+          <DialogDescription>
+            Preencha os campos abaixo para criar uma nova
+          </DialogDescription>
+        </DialogHeader>
+
         <CreateFolderColumnForm onSubmit={mutate} onDismiss={onDismiss} />
       </DialogContent>
     </Dialog>

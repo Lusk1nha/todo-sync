@@ -7,7 +7,7 @@ export const FolderColumnSchema = z.object({
     })
     .min(3, "Nome deve ter no mínimo 3 caracteres!")
     .max(50, "Nome deve ter no máximo 50 caracteres!"),
-  position: z.number().int().nullable(),
+  position: z.number().int(),
   color: z.string().max(7),
 });
 

@@ -1,9 +1,11 @@
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { EllipsisVertical, FolderCog, FolderX } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Folder } from "@/shared/factories/folders-factory";
 import { Separator } from "../ui/separator";
+import { EditFolderSheet } from "../sheets/edit-folder-sheet";
+import { DeleteFolderDialog } from "../dialogs/delete-folder-dialog";
 
 interface IFolderMenuProps {
   folder: Folder;
@@ -11,8 +13,6 @@ interface IFolderMenuProps {
 
 export function FolderMenu(props: Readonly<IFolderMenuProps>) {
   const { folder } = props;
-
-  console.log(folder);
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -30,7 +30,7 @@ export function FolderMenu(props: Readonly<IFolderMenuProps>) {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-40 flex flex-col gap-2">
+      <PopoverContent align="end" className="w-40 flex flex-col gap-2">
         <div>
           <h2 className="text-sm font-medium">Pasta</h2>
           <p className="text-xs text-primary">Gerencie a pasta</p>
@@ -38,15 +38,8 @@ export function FolderMenu(props: Readonly<IFolderMenuProps>) {
 
         <Separator />
 
-        <Button size="sm" type="button" variant="outline" className="gap-2">
-          <FolderCog className="w-4 h-4" />
-          Editar pasta
-        </Button>
-
-        <Button size="sm" type="button" variant="outline" className="gap-2">
-          <FolderX className="w-4 h-4" />
-          Excluir pasta
-        </Button>
+        <EditFolderSheet folderId={folder.id} />
+        <DeleteFolderDialog folderId={folder.id} />
       </PopoverContent>
     </Popover>
   );
