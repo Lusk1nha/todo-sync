@@ -1,9 +1,9 @@
 import { IAuthResponse } from "../repositories/auth-repo";
 
 export class Auth {
-  private user_id: string;
-  private _token: string;
-  private _expiresIn: number;
+  private readonly user_id: string;
+  private readonly _token: string;
+  private readonly _expiresIn: number;
 
   constructor(data: IAuthResponse) {
     this.user_id = data.user_id;

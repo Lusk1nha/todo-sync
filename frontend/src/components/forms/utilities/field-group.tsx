@@ -1,9 +1,16 @@
+import { cn } from "@/lib/utils";
+
 interface IFieldGroupProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 export function FieldGroup(props: Readonly<IFieldGroupProps>) {
-  const { children } = props;
+  const { children, className } = props;
 
-  return <fieldset className="flex flex-col gap-y-6">{children}</fieldset>;
+  return (
+    <fieldset className={cn("flex flex-col gap-y-6", className)}>
+      {children}
+    </fieldset>
+  );
 }

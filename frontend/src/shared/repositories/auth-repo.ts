@@ -21,7 +21,7 @@ export interface ILoginUser {
 }
 
 export class AuthRepo {
-  private _API_URL = "http://localhost:3000/api";
+  private readonly _API_URL = "http://localhost:3000/api";
 
   async signup(data: ISignUpRequest): Promise<void> {
     const endpoint = `${this._API_URL}/signup`;

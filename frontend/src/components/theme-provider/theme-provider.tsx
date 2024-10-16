@@ -20,7 +20,7 @@ type ThemeProviderState = {
 };
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "light",
   setTheme: () => null,
 };
 
@@ -50,6 +50,8 @@ export function ThemeProvider(props: Readonly<ThemeProviderProps>) {
         : "light";
 
       root.classList.add(systemTheme);
+      setTheme(systemTheme);
+
       return;
     }
 

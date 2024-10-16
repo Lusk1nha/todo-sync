@@ -1,10 +1,10 @@
 export default function HomeRoute() {
   return (
-    <div className="text-xl font-medium py-6">
-      <div>
-        <h2 className="text-muted-foreground">
-          Bem vindo de volta! <span>Lucas</span>
-        </h2>
+    <div className="w-full h-full text-xl font-medium">
+      <div className="h-full flex items-center justify-center p-6">
+        <p className="text-center text-muted-foreground mt-2">
+          Selecione uma das pastas na barra lateral para começar
+        </p>
       </div>
     </div>
   );

@@ -3,7 +3,8 @@ import { IUserProfileResponse } from "../repositories/users-profiles-repo";
 export class UserProfile {
   private _user_id: string;
   private _username: string;
-  private _birthday: Date;
+
+  private _birthday: Date | null;
   private _profile_picture_url?: string;
 
   private _created_at: Date;
@@ -13,7 +14,7 @@ export class UserProfile {
     this._user_id = data.user_id;
     this._username = data.username;
 
-    this._birthday = new Date(data.date_of_birth);
+    this._birthday = data?.date_of_birth ? new Date(data.date_of_birth) : null;
     this._profile_picture_url = data?.profile_picture_url;
 
     this._created_at = new Date(data.created_at);
@@ -28,7 +29,7 @@ export class UserProfile {
     return this._username;
   }
 
-  get birthday(): Date {
+  get birthday(): Date | null {
     return this._birthday;
   }
 

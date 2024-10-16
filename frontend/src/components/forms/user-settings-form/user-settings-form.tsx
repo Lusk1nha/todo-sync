@@ -19,29 +19,49 @@ import { Button } from "@/components/ui/button";
 import { TermsAndConditionsField } from "@/components/inputs/terms-and-conditions";
 
 import { UploadAvatar } from "@/components/inputs/upload-avatar/upload-avatar";
+import { BIRTHDAY_MAX_DATE, BIRTHDAY_MIN_DATE } from "@/shared/constants";
+import { UserProfile } from "@/shared/factories/user-profile-factory";
+import { Link } from "react-router-dom";
+import { RoutesEnum } from "@/shared/enums/routes-enum";
+import { Home, Save } from "lucide-react";
 
 interface IUsersSettingsFormProps {
   onSubmit: (data: UsersSettingsSchemaType) => void;
+  defaultValues?: UserProfile | null;
 }
 
 export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
-  const { onSubmit } = props;
+  const { onSubmit, defaultValues } = props;
 
   const form = useForm<UsersSettingsSchemaType>({
     resolver: zodResolver(UsersSettingsSchema),
-    defaultValues: {
-      username: "",
-      birthday: null,
-      profilePicture: null,
-      termsAndConditions: false,
-    },
+    mode: "onChange",
+    defaultValues: getDefaultUserSettings(defaultValues),
   });
+
+  function getDefaultUserSettings(
+    user?: UserProfile | null
+  ): UsersSettingsSchemaType {
+    if (!user) {
+      return {
+        username: "",
+        birthday: null,
+        profilePicture: null,
+        termsAndConditions: false,
+      };
+    }
+
+    return {
+      username: user.username,
+      birthday: user?.birthday ?? null,
+      profilePicture: null,
+      termsAndConditions: true,
+    };
+  }
 
   const { control, handleSubmit, formState } = form;
 
-  const { isSubmitting, isValid, errors } = formState;
-
-  console.log({ isValid, errors });
+  const { isSubmitting, isValid } = formState;
 
   return (
     <Form {...form}>
@@ -63,7 +83,6 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                     disabled={field.disabled}
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -82,8 +101,8 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                     onBlur={field.onBlur}
                     disabled={field.disabled}
                     placeholder="Seleciona a data de nascimento"
-                    min={new Date(1900, 0, 1)}
-                    max={new Date()}
+                    min={BIRTHDAY_MIN_DATE}
+                    max={BIRTHDAY_MAX_DATE}
                   />
                 </FormControl>
                 <FormMessage />
@@ -104,7 +123,7 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
                   <UploadAvatar
                     name={name}
                     onChange={onChange}
-                    value={value as any}
+                    value={value as File}
                     onBlur={onBlur}
                     dragAndDropStrings={{
                       dragAndDrop: "Arraste e solte ou clique para procurar",
@@ -142,13 +161,23 @@ export function UsersSettingsForm(props: Readonly<IUsersSettingsFormProps>) {
           />
         </FieldGroup>
 
-        <Button
-          className="w-full"
-          type="submit"
-          disabled={isSubmitting || !isValid}
-        >
-          Estou pronto para começar!
-        </Button>
+        <div className="flex justify-between items-center gap-4">
+          {defaultValues && (
+            <Link to={RoutesEnum.HOME}>
+              <Button className="gap-2" variant="link" type="button">
+                <Home className="w-4 h-4" />
+                Voltar
+              </Button>
+            </Link>
+          )}
+
+          <Button className="gap-2" type="submit" disabled={isSubmitting || !isValid}>
+            <Save className="w-4 h-4" />
+            {defaultValues
+              ? "Atualizar configurações"
+              : "Estou pronto para começar!"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

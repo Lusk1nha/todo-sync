@@ -14,33 +14,46 @@ import {
 } from "react-router-dom";
 import { RoutesEnum } from "./shared/enums/routes-enum";
 
-import AuthRoute from "./routes/auth-route/auth-route";
-import ForgotUserRoute from "./routes/forgot-user-route";
-import LoginRoute from "./routes/login-user-route";
-import RegisterUserRoute from "./routes/register-user-route";
-import ProtectedAuthRoute from "./routes/protected-auth";
+import AuthRoute from "./routes/auth/auth-route";
+import ForgotUserRoute from "./routes/auth/forgot-user-route";
+import LoginRoute from "./routes/auth/login-user-route";
+import RegisterUserRoute from "./routes/auth/register-user-route";
+
 import HomeRoute from "./routes/home-route";
+import ProtectedAuthRoute from "./routes/middlewares/auth-protected-middleware-route";
+import UserProfileMiddlewareRoute from "./routes/middlewares/user-profile-middleware-route";
 import { queryClient } from "./shared/helpers/react-query-helper";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
-import { LoggedRoute } from "./routes/logged-route";
-import { WizardPage } from "./routes/wizard-page/wizard-page";
+
+import { WizardPage } from "./routes/wizard-route";
+import { MainContentRoute } from "./routes/main-content-route";
+import { NotFoundRoute } from "./routes/not-found-route";
+
+import { FolderMiddlewareRoute } from "./routes/middlewares/folder-middleware-route";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path={RoutesEnum.ROOT} element={<App />}>
-
-      {/* The following routes are protected */}
+    <Route
+      path={RoutesEnum.ROOT}
+      element={<App />}
+      errorElement={<NotFoundRoute />}
+    >
       <Route path={RoutesEnum.ROOT} element={<ProtectedAuthRoute />}>
-        <Route path={RoutesEnum.ROOT} element={<LoggedRoute />}>
-          <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+        <Route path={RoutesEnum.ROOT} element={<UserProfileMiddlewareRoute />}>
+          <Route path={RoutesEnum.ROOT} element={<MainContentRoute />}>
+            <Route path={RoutesEnum.HOME} element={<HomeRoute />} />
+            <Route
+              path={RoutesEnum.FOLDER}
+              element={<FolderMiddlewareRoute />}
+            />
+          </Route>
         </Route>
 
         <Route path={RoutesEnum.WIZARD} element={<WizardPage />} />
       </Route>
-      
-      {/* The following routes are not protected */}
+
       <Route path={RoutesEnum.AUTH} element={<AuthRoute />}>
         <Route path={RoutesEnum.LOGIN} element={<LoginRoute />} />
         <Route path={RoutesEnum.REGISTER} element={<RegisterUserRoute />} />

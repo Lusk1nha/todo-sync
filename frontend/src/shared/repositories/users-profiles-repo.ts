@@ -18,7 +18,7 @@ export interface IUpdateSettings {
 }
 
 export class UsersProfilesRepo {
-  private _API_URL = "http://localhost:3000/api/users";
+  private readonly _API_URL = "http://localhost:3000/api/users";
 
   async getCurrentUserProfile(): Promise<IUserProfileResponse> {
     const endpoint = `${this._API_URL}/current-user`;
@@ -33,8 +33,20 @@ export class UsersProfilesRepo {
     return response.data;
   }
 
-  async updateUserSettings(data: IUpdateSettings): Promise<void> {
+  async createUserProfile(data: IUpdateSettings): Promise<void> {
     const endpoint = `${this._API_URL}/settings`;
+
+    await axios.post<string>(endpoint, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getTokenAuthorization(),
+      },
+      withCredentials: true,
+    });
+  }
+
+  async updateUserSettings(data: IUpdateSettings): Promise<void> {
+    const endpoint = `${this._API_URL}/current-user`;
 
     await axios.patch<string>(endpoint, data, {
       headers: {

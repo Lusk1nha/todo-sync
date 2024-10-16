@@ -12,6 +12,7 @@ export class UsersProfilesService implements UsersProfilesModel {
     this._repository = new UsersProfilesRepo();
 
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.create = this.create.bind(this);
     this.update = this.update.bind(this);
   }
 
@@ -23,6 +24,10 @@ export class UsersProfilesService implements UsersProfilesModel {
     }
 
     return new UserProfile(data);
+  }
+
+  async create(data: IUpdateSettings): Promise<void> {
+    await this._repository.createUserProfile(data);
   }
 
   async update(data: IUpdateSettings): Promise<void> {
