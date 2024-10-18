@@ -49,7 +49,7 @@ export function EditFolderSheet(props: Readonly<IEditFolderSheetProps>) {
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="sm:max-w-[600px] w-[600px] h-full overflow-auto"
+        className="sm:max-w-[600px] w-full h-full overflow-auto"
       >
         <SheetHeader>
           <SheetTitle>Editar pasta</SheetTitle>

@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ColumnsFolderRepeater } from "./columns-folder-repeater";
 
-import { RenderErrorList } from "../utilities/render-error-list";
 import { Folder } from "@/shared/factories/folders-factory";
 
 type CreateFolderFormStrings = {
@@ -50,7 +49,7 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
   });
 
   const { control, handleSubmit, formState } = form;
-  const { isValid, isSubmitting, errors } = formState;
+  const { isValid, isSubmitting } = formState;
 
   function getDefaultValues(folder?: Folder): FolderSchemaType {
     if (!folder) {
@@ -139,8 +138,6 @@ export function CreateFolderForm(props: Readonly<ICreateFolderFormProps>) {
         >
           {strings.save}
         </Button>
-
-        <RenderErrorList errors={errors} />
       </form>
     </Form>
   );

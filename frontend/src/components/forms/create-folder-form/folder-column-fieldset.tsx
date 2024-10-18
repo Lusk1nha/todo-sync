@@ -1,58 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { FormControl, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSortable } from "@dnd-kit/sortable";
+
 import { FieldArrayWithId, useFormContext } from "react-hook-form";
 
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, X } from "lucide-react";
+import { X } from "lucide-react";
+import { FolderSchemaType } from "@/shared/schemas/folder-schema";
 
-interface ISortableFieldProps {
-  id: number;
+interface IFolderColumnFieldsetProps {
   index: number;
-  field: FieldArrayWithId<
-    {
-      name: string;
-      description: string | null;
-      columns: {
-        name: string;
-        position: number;
-        color: string;
-      }[];
-    },
-    "columns",
-    "id"
-  >;
-
+  field: FieldArrayWithId<FolderSchemaType, "columns", "id">;
   onRemoveColumn: (index: number) => void;
 }
 
-export function SortableField(props: Readonly<ISortableFieldProps>) {
-  const { id, index, field, onRemoveColumn } = props;
-  const { control } = useFormContext();
+export function FolderColumnFieldset(
+  props: Readonly<IFolderColumnFieldsetProps>
+) {
+  const { index, onRemoveColumn } = props;
+  const { control, formState } = useFormContext();
+  const { errors } = formState;
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const isError = (errors?.columns as Record<string, any>)?.[index];
 
   return (
-    <FormItem
-      className="flex items-center space-y-0 gap-2"
-      key={field.id}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
-      <Button variant="outline" size="sm" className="w-10 h-9">
-        <GripVertical className="w-8 h-8" />
-      </Button>
-
+    <>
       <FormField
         control={control}
         name={`columns.${index}.name`}
@@ -64,6 +36,7 @@ export function SortableField(props: Readonly<ISortableFieldProps>) {
               value={field.value ?? ""}
               onChange={field.onChange}
               onBlur={field.onBlur}
+              className={isError ? "border-destructive" : ""}
             />
           </FormControl>
         )}
@@ -94,6 +67,6 @@ export function SortableField(props: Readonly<ISortableFieldProps>) {
       >
         <X className="w-4 h-4" />
       </Button>
-    </FormItem>
+    </>
   );
 }

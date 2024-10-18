@@ -111,7 +111,7 @@ export function CreateFolderSheet(props: Readonly<IFolderSheetProps>) {
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="sm:max-w-[600px] w-[600px] h-full overflow-auto"
+        className="sm:max-w-[600px] w-full h-full overflow-auto"
       >
         <SheetHeader>
           <SheetTitle>Criar nova pasta</SheetTitle>

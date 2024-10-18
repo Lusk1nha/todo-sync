@@ -5,22 +5,11 @@ import { FolderSchemaType } from "@/shared/schemas/folder-schema";
 import { Columns } from "lucide-react";
 import { Control, useFieldArray } from "react-hook-form";
 
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  KeyboardSensor,
-  MouseSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
+import { SortableList } from "@/components/sortable-list/sortable-list";
+import { SortableItem } from "@/components/sortable-list/sortable-item";
 
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-
-import { SortableField } from "./sortable-folder-field";
+import { DragHandle } from "@/components/sortable-list/drag-handle";
+import { FolderColumnFieldset } from "./folder-column-fieldset";
 
 interface IColumnsFolderRepeaterProps {
   control: Control<FolderSchemaType>;
@@ -31,14 +20,6 @@ export function ColumnsFolderRepeater(
   props: Readonly<IColumnsFolderRepeaterProps>
 ) {
   const { control, name } = props;
-
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 10,
-    },
-  });
-  const keyboardSensor = useSensor(KeyboardSensor);
-  const sensors = useSensors(mouseSensor, keyboardSensor);
 
   const { fields, move, remove, append } = useFieldArray({
     control,
@@ -59,19 +40,6 @@ export function ColumnsFolderRepeater(
     remove(index);
   }
 
-  function handlePositionChange(event: DragEndEvent) {
-    const { active, over } = event;
-
-    if (over && active.id !== over?.id) {
-      const activeIndex = active.data.current?.sortable?.index;
-      const overIndex = over.data.current?.sortable?.index;
-
-      if (activeIndex !== undefined && overIndex !== undefined) {
-        move(activeIndex, overIndex);
-      }
-    }
-  }
-
   return (
     <div className="flex flex-col gap-2">
       <FormLabel>Colunas</FormLabel>
@@ -82,30 +50,26 @@ export function ColumnsFolderRepeater(
             Adicione colunas para organizar suas tarefas
           </p>
         ) : (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handlePositionChange}
-          >
-            <SortableContext
-              items={fields.map((field) => field.position)}
-              strategy={verticalListSortingStrategy}
-            >
-              <fieldset className="flex flex-col gap-2">
-                {fields.map((field, index) => {
-                  return (
-                    <SortableField
-                      id={field.position}
-                      key={field.id}
-                      index={index}
-                      field={field}
-                      onRemoveColumn={handleRemoveColumn}
-                    />
-                  );
-                })}
-              </fieldset>
-            </SortableContext>
-          </DndContext>
+          <SortableList
+            items={fields}
+            renderItem={(item, index) => (
+              <SortableItem
+                className="w-full flex items-center space-y-0 gap-2"
+                id={item.id}
+              >
+                <DragHandle />
+
+                <FolderColumnFieldset
+                  field={item}
+                  index={index}
+                  onRemoveColumn={handleRemoveColumn}
+                />
+              </SortableItem>
+            )}
+            onChange={(active, over) => {
+              move(active, over);
+            }}
+          />
         )}
       </div>
 

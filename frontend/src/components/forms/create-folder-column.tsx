@@ -16,7 +16,7 @@ import {
 import { Input } from "../ui/input";
 import { FieldGroup } from "./utilities/field-group";
 import { Button } from "../ui/button";
-import { Columns, Palette, X } from "lucide-react";
+import { Columns, Shuffle, X } from "lucide-react";
 import { ColorPicker } from "../ui/color-picker";
 import { generateRandomHexColor } from "@/shared/helpers/colors-helper";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -50,7 +50,7 @@ export function CreateFolderColumnForm(
     <Form {...form}>
       <form
         className="w-full flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit, (errors) => console.log(errors))}
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FieldGroup className="gap-y-4">
           <FormItem>
@@ -110,7 +110,7 @@ export function CreateFolderColumnForm(
                           }
                           className="h-9"
                         >
-                          <Palette className="w-4 h-4" />
+                          <Shuffle className="w-4 h-4" />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>Gerar cor aleatória</TooltipContent>
