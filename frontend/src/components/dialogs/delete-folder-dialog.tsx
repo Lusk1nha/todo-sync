@@ -55,7 +55,7 @@ export function DeleteFolderDialog(props: Readonly<IDeleteFolderDialogProps>) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" type="button" variant="outline" className="gap-2">
+        <Button size="sm" type="button" variant="destructive" className="gap-2">
           <FolderX className="w-4 h-4" />
           Excluir pasta
         </Button>

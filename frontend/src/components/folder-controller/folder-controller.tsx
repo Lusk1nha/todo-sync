@@ -27,7 +27,7 @@ export function FolderController(props: Readonly<IFolderControllerProps>) {
           </div>
         )}
 
-        <h4 className="text-foreground text-lg whitespace-nowrap overflow-hidden text-ellipsis pl-6">
+        <h4 className="text-foreground text-xl font-bold whitespace-nowrap overflow-hidden text-ellipsis pl-6">
           {folder.name}
         </h4>
       </div>

@@ -25,16 +25,18 @@ export function ColorCircle(props: Readonly<IColorCircleProps>) {
   return (
     <AnimatePresence>
       <motion.div
-        className={"bg-primary w-4 h-4 rounded-full cursor-pointer"}
+        className={
+          "bg-primary w-4 h-4 rounded-full flex items-center justify-center cursor-pointer hover:border hover:border-primary transition-colors"
+        }
         style={{
           backgroundColor: color,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        whileHover={{ scale: 1.1, transition: { duration: 0.1 } }}
         exit={{ opacity: 0 }}
-        onClick={onCopyColor}
-      />
+      >
+        <button type="button" className="w-full h-full" onClick={onCopyColor} />
+      </motion.div>
     </AnimatePresence>
   );
 }

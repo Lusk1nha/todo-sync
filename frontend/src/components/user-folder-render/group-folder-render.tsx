@@ -59,7 +59,7 @@ function RenderGroup(props: Readonly<IRenderGroupProps>) {
         {name}
       </motion.h3>
 
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col">
         {folders.map((folder) => (
           <FolderSelectButton
             key={folder.id}
